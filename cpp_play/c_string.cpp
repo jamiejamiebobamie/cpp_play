@@ -12,27 +12,27 @@
 #include "c_string.hpp"
 
 int main(){
-    const char* s = "Cherno";
-    const char* nope = garble(s);
-    const int wordLength = 6;
-    const std::string t = "test";
     const char word[] = "Cherno";
     const int size = sizeof(word)/sizeof(char);
-    const char* newerWord = garble(word,size);
-    std::string nw = (std::string)newerWord;
-    std::cout << nw << std::endl;
+    const char* newWord = garble(word,size);
+    print(newWord);
+    delete newWord;
 
     const char* newestWord = reverse(word);
-    std::string nsw = (std::string)newestWord;
-    std::cout << nsw << std::endl;
+    print(newestWord);
+    delete newestWord;
+    
+    const char* s = "Cherno";
+    const char* fisherYates = garble(s);
+    print(fisherYates);
+    delete fisherYates;
     
 //    std::cin.get();
    return 0;
 }
 
-
 const char* garble(const char* inputString, const int wordLength){
-    // iterate through the string and choose random indices to swap
+    // garbles the word without maintaining the same frequency of characters
     char* newWord = new char[wordLength-1];
     int count = 0;
     srand(time(NULL));
@@ -45,27 +45,34 @@ const char* garble(const char* inputString, const int wordLength){
 }
 
 const char* garble(const char* inputString){
-    // implementing fisher-yates shuffle
-    int wordLength = strlen(inputString)-1;
-    char* returnString = new char[wordLength];
+    // fisher-yates shuffle
+    const int wordLength = strlen(inputString);
+    char* newWord = new char[wordLength-1];
+    newWord = strcpy(newWord, inputString);
+    int count = wordLength - 1;
     srand(time(NULL));
-    while(wordLength){
-        int index = rand() % wordLength;
-        std::cout << wordLength << index << std::endl;
-        returnString[5-wordLength] = inputString[index];
-        wordLength--;
-
+    while(count){
+        int randomIndex = rand() % count;
+        newWord[count] = newWord[randomIndex];
+        newWord[randomIndex] = inputString[count];
+        count--;
     }
-    return returnString;
+    return newWord;
 }
 
 const char* reverse(const char* inputString){
-    int wordLength = strlen(inputString);
-    const int len = wordLength-1;
+    // reverses the word.
+    const int len = strlen(inputString);
+    int index = len - 1;
     char* returnString = new char[len];
-    while(wordLength > -1){
-        returnString[5-wordLength] = inputString[wordLength];
-        wordLength--;
+    while(index > -1){
+        returnString[index] = inputString[len - index - 1];
+        index--;
     };
     return returnString;
+}
+
+template<class T>
+void print(T item){
+    std::cout << item << std::endl;
 }
