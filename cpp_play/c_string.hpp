@@ -16,6 +16,7 @@
 const char* garble(const char* inputString, const int wordLength);
 const char* garble(const char* inputString);
 const char* reverse(const char* inputString);
+const char* copy(char destination[], const char* source);
 
 template<class T>
 void print(T);

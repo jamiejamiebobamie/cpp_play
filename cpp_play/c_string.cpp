@@ -27,13 +27,18 @@ int main(){
     print(fisherYates);
     delete fisherYates;
     
+    const char* source = ":)";
+    char destination[] = "i like pens";
+    copy(destination,source);
+    print(destination);
+    
 //    std::cin.get();
    return 0;
 }
 
 const char* garble(const char* inputString, const int wordLength){
     // garbles the word without maintaining the same frequency of characters
-    char* newWord = new char[wordLength-1];
+    char* newWord = new char[wordLength];
     int count = 0;
     srand(time(NULL));
     while(count < wordLength){
@@ -41,20 +46,23 @@ const char* garble(const char* inputString, const int wordLength){
         newWord[count] = inputString[index];
         count++;
     }
+    newWord[wordLength-1] = 0;
     return newWord;
 }
 
 const char* garble(const char* inputString){
     // fisher-yates shuffle
     const int wordLength = strlen(inputString);
-    char* newWord = new char[wordLength-1];
+    char* newWord = new char[wordLength];
     newWord = strcpy(newWord, inputString);
     int count = wordLength - 1;
     srand(time(NULL));
+    int randomIndex;
     while(count){
-        int randomIndex = rand() % count;
+        randomIndex = rand() % count;
+        char temp = newWord[count];
         newWord[count] = newWord[randomIndex];
-        newWord[randomIndex] = inputString[count];
+        newWord[randomIndex] = temp;
         count--;
     }
     return newWord;
@@ -70,6 +78,16 @@ const char* reverse(const char* inputString){
         index--;
     };
     return returnString;
+}
+
+const char* copy(char destination[], const char* source){
+    int i = 0;
+    while(destination[i] && source[i]){
+        destination[i] = source[i];
+        i++;
+    }
+    destination[i] = 0;
+    return destination;
 }
 
 template<class T>
