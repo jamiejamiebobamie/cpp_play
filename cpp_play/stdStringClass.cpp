@@ -8,17 +8,33 @@
 
 #include "stdStringClass.hpp"
 #include<iostream>
+#include<string_view>
 #include "helperFunctions.cpp"
 
 int main(){
     std::string myString = "hello";
+    helpers::print(1);
     helpers::print(myString);
     std::string* reversedWord = reverse(myString);
+    helpers::print(2);
     helpers::print(*reversedWord);
     reverse(reversedWord);
+    helpers::print(3);
     helpers::print(*reversedWord);
     return 0;
 }
+
+void reverse(std::string* word){
+    int i = 0;
+    int j = (*word).length()-1;
+    
+    while (i < j){
+        std::swap(word[i], word[j]);
+        i++;
+        j--;
+    }
+}
+
 
 std::string* reverse(std::string word){
     std::string* newString = new std::string("");
@@ -26,23 +42,4 @@ std::string* reverse(std::string word){
         *newString += word[i];
     }
     return newString;
-}
-
-void reverse(std::string* word){
-//    std::string* newString = new std::string("");
-    int i = 0;
-    int j = (*word).length();
-    helpers::print(j);
-    while (i < j){
-//        std::string lower = (*(*word)+i);
-////        std::string upper = word[j];
-        std::string maybeAString = (std::string)(*(word+i));
-        helpers::print(maybeAString);
-//        helpers::print(lower);
-
-//        word[i] = upper;
-//        word[j] = lower;
-        i++;
-        j--;
-    }
 }
