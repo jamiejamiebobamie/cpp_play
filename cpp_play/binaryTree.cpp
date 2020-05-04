@@ -16,17 +16,17 @@ class BinaryNode {
         BinaryNode(int);
         BinaryNode* getLeft();
         BinaryNode* getRight();
+        int getData();
         void setLeft(BinaryNode*);
         void setRight(BinaryNode*);
         void setData(int);
-        int getData();
     private:
         BinaryNode* left;
         BinaryNode* right;
         int data;
 };
-BinaryNode::BinaryNode(){};
-BinaryNode::BinaryNode(int data) : data{data} {};
+BinaryNode::BinaryNode(): data{0}, left{nullptr}, right{nullptr} {};
+BinaryNode::BinaryNode(int data) : data{data}, left{nullptr}, right{nullptr} {};
 BinaryNode* BinaryNode::getLeft(){return left;};
 BinaryNode* BinaryNode::getRight(){return right;};
 void BinaryNode::setLeft(BinaryNode* node){left = node;};
@@ -36,6 +36,8 @@ int BinaryNode::getData(){return data;};
 
 class BinaryTree {
     public:
+        void incrementCount();
+        void decrementCount();
         BinaryTree();
         BinaryTree(int data);
         BinaryTree(BinaryNode*);
@@ -43,90 +45,60 @@ class BinaryTree {
         void setRoot(int);
         void setRoot(BinaryNode*);
         int getCount();
-        void incrementCount();
-        void decrementCount();
-        void addNode(int);
         void addNode(BinaryNode*);
+        void addNode(int);
+        void inorderTraversal_Recur(BinaryNode* node);
         void inorderTraversal();
     private:
         BinaryNode* root;
         int count;
 };
-BinaryTree::BinaryTree(){root = new BinaryNode();};
-BinaryTree::BinaryTree(BinaryNode* root) : root{root} {};
-BinaryTree::BinaryTree(int data){root = new BinaryNode(data);};
-int BinaryTree::getCount(){return count;};
 void BinaryTree::incrementCount(){count++;};
 void BinaryTree::decrementCount(){count--;};
+BinaryTree::BinaryTree() : count{0} {root = new BinaryNode();};
+BinaryTree::BinaryTree(BinaryNode* root) : root{root}, count{0} {};
+BinaryTree::BinaryTree(int data){root = new BinaryNode(data);};
+int BinaryTree::getCount(){return count;};
 BinaryNode* BinaryTree::getRoot(){return root;};
-void BinaryTree::setRoot(BinaryNode* root){root = root; incrementCount();};
-void BinaryTree::setRoot(int data){root = new BinaryNode(data); incrementCount();};
+void BinaryTree::setRoot(BinaryNode* node){if (!root)incrementCount(); root = node; };
+void BinaryTree::setRoot(int data){if (!root)incrementCount(); root = new BinaryNode(data);};
 void BinaryTree::addNode(BinaryNode* newNode){
-        BinaryNode* node = root;
-        int i = 0;
-        while (node){
-            // this tree sets equal nodes to the left side of the tree.
-            if (node->getData() == newNode->getData()){
-                // check if node->left is empty
-                // if it is, set the current node's left to newNode
-                // if it's not, go left
-                if (node->getLeft()){
-                    node = node->getLeft();
-                    std::cout << node->getData() << "hi" << node->getLeft() << std::endl;
-                    break;
-                }
-                else
-                    node->setLeft(newNode);
-            } else if (node->getData() < newNode->getData()) {
-                // check if node->right is empty
-                // if it is, set the current node's right to newNode
-                // if it's not, go right
-                if (node->getRight()){
-                    node = node->getRight();
-                    std::cout << node->getData() << "hi" << std::endl;
-                    break;
-                }
-                else{
-                    node->setRight(newNode);
-                    std::cout << node->getRight()->getData() << "hello" << std::endl;
-                }
-            } else if (node->getData() > newNode->getData()) {
-                // check if node->left is empty
-                // if it is, set the current node's left to newNode
-                // if it's not, go left
-                if (node->getLeft()){
-                    node = node->getLeft();
-                    std::cout << node->getData() << "hi" << std::endl;
-                    break;
-                }
-                else
-                    node->setLeft(newNode);
+    BinaryNode* node = root;
+    while (node){
+        if (node->getData() >= newNode->getData()){
+            if (node->getLeft()){
+                node = node->getLeft();
             }
-            i++;
-            if (i>100)
+            else{
+                node->setLeft(newNode);
                 break;
+            }
+        } else if (node->getData() < newNode->getData()) {
+            if (node->getRight()){
+                node = node->getRight();
+            }
+            else{
+                node->setRight(newNode);
+                break;
+            }
         }
-  
-        incrementCount();
+    }
+    incrementCount();
 };
 void BinaryTree::addNode(int data){
     BinaryNode* newNode = new BinaryNode(data);
     addNode(newNode);
 };
 void BinaryTree::inorderTraversal(){
-    //    left
-    //    data
-    //    right
     BinaryNode* node = root;
-    while(node){
-        if (node->getLeft()){
-           node = node->getLeft();
-        } else if (node->getData()){
-            std::cout << node->getData() << std::endl;
-        } else if (node->getRight()) {
-            node = node->getRight();
-        }
-    }
+    inorderTraversal_Recur(node);
+};
+void BinaryTree::inorderTraversal_Recur(BinaryNode* node){
+    if (!node)
+        return;
+    inorderTraversal_Recur(node->getLeft());
+    std::cout << node->getData() << std::endl;
+    inorderTraversal_Recur(node->getRight());
 };
 
 int main(){
@@ -139,7 +111,6 @@ int main(){
     tree.addNode(&two);
     tree.addNode(&three);
     tree.addNode(4);
-    
     BinaryNode negOne = BinaryNode(-1);
     BinaryNode negTwo = BinaryNode(-2);
     BinaryNode negThree = -3;
@@ -150,8 +121,10 @@ int main(){
     tree.addNode(&negThree);
     tree.addNode(&dupNegTwo);
     tree.addNode(&dupNegThree);
+    tree.inorderTraversal();
     
-//    tree.inorderTraversal();
+    // this isn't working correctly. will fix.
+    tree.getCount();
     
     return 0;
 }

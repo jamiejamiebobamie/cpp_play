@@ -11,18 +11,18 @@
 #include<string_view>
 #include "helperFunctions.cpp"
 
-int main(){
-    std::string myString = "hello";
-    helpers::print(1);
-    helpers::print(myString);
-    std::string* reversedWord = reverse(myString);
-    helpers::print(2);
-    helpers::print(*reversedWord);
-    reverse(reversedWord);
-    helpers::print(3);
-    helpers::print(*reversedWord);
-    return 0;
-}
+//int main(){
+//    std::string myString = "hello";
+//    helpers::print(1);
+//    helpers::print(myString);
+//    std::string* reversedWord = reverse(myString);
+//    helpers::print(2);
+//    helpers::print(*reversedWord);
+//    reverse(reversedWord);
+//    helpers::print(3);
+//    helpers::print(*reversedWord);
+//    return 0;
+//}
 
 void reverse(std::string* word){
     int i = 0;
