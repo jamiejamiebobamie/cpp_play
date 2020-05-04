@@ -6,7 +6,6 @@
 //  Copyright © 2020 James McCrory. All rights reserved.
 //
 
-#include "binaryTree.hpp"
 #include<iostream>
 #include"helperFunctions.cpp"
 
@@ -161,34 +160,34 @@ BinaryNode* BinaryTree::popNode(BinaryNode* nodeToPop){
 //    return nodeToPop;
 }
 
-int main(){
-    BinaryTree tree = 0;
-    
-    BinaryNode one = BinaryNode(1);
-    BinaryNode two = BinaryNode(2);
-    BinaryNode three = 3;
-    tree.addNode(&one);
-    tree.addNode(&two);
-    tree.addNode(&three);
-    tree.addNode(4);
-    BinaryNode negOne = BinaryNode(-1);
-    BinaryNode negTwo = BinaryNode(-2);
-    BinaryNode negThree = -3;
-    BinaryNode dupNegTwo = BinaryNode(-2);
-    BinaryNode dupNegThree = -3;
-    tree.addNode(&negOne);
-    tree.addNode(&negTwo);
-    tree.addNode(&negThree);
-    tree.addNode(&dupNegTwo);
-    tree.addNode(&dupNegThree);
-    tree.inorderTraversal();
-    BinaryNode* node1 = tree.findNode(2);
-    BinaryNode* node2 = tree.findNode(18);
-    helpers::print(node1);
-    helpers::print(node2);
-
-    // this isn't working correctly. will fix.
-    tree.getCount();
-    
-    return 0;
-}
+//int main(){
+//    BinaryTree tree = 0;
+//    
+//    BinaryNode one = BinaryNode(1);
+//    BinaryNode two = BinaryNode(2);
+//    BinaryNode three = 3;
+//    tree.addNode(&one);
+//    tree.addNode(&two);
+//    tree.addNode(&three);
+//    tree.addNode(4);
+//    BinaryNode negOne = BinaryNode(-1);
+//    BinaryNode negTwo = BinaryNode(-2);
+//    BinaryNode negThree = -3;
+//    BinaryNode dupNegTwo = BinaryNode(-2);
+//    BinaryNode dupNegThree = -3;
+//    tree.addNode(&negOne);
+//    tree.addNode(&negTwo);
+//    tree.addNode(&negThree);
+//    tree.addNode(&dupNegTwo);
+//    tree.addNode(&dupNegThree);
+//    tree.inorderTraversal();
+//    BinaryNode* node1 = tree.findNode(2);
+//    BinaryNode* node2 = tree.findNode(18);
+//    helpers::print(node1);
+//    helpers::print(node2);
+//
+//    // this isn't working correctly. will fix.
+//    tree.getCount();
+//    
+//    return 0;
+//}
