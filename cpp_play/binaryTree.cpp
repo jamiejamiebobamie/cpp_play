@@ -11,9 +11,11 @@
 #include"helperFunctions.cpp"
 
 class BinaryNode {
+//    friend bool operator==(const BinaryNode&, const BinaryNode&);
     public:
         BinaryNode();
         BinaryNode(int);
+        BinaryNode* operator=(const BinaryNode&);
         BinaryNode* getLeft();
         BinaryNode* getRight();
         int getData();
@@ -27,12 +29,21 @@ class BinaryNode {
 };
 BinaryNode::BinaryNode(): data{0}, left{nullptr}, right{nullptr} {};
 BinaryNode::BinaryNode(int data) : data{data}, left{nullptr}, right{nullptr} {};
+// in case i want to do a multiple assignment. do i need to worry about memberwise assignment with the pointer member variables in this instance?
+BinaryNode* BinaryNode::operator=(const BinaryNode&){return this;};
 BinaryNode* BinaryNode::getLeft(){return left;};
 BinaryNode* BinaryNode::getRight(){return right;};
 void BinaryNode::setLeft(BinaryNode* node){left = node;};
 void BinaryNode::setRight(BinaryNode* node){right = node;};
-void BinaryNode::setData(int data){data = data;};
+void BinaryNode::setData(int newData){data = newData;};
 int BinaryNode::getData(){return data;};
+
+//bool operator==(const BinaryNode& firstNode, const BinaryNode& secondNode){
+//    if(firstNode == secondNode)
+//        return true;
+//    else
+//        return false;
+//};
 
 class BinaryTree {
     public:
@@ -49,6 +60,8 @@ class BinaryTree {
         void addNode(int);
         void inorderTraversal_Recur(BinaryNode* node);
         void inorderTraversal();
+        BinaryNode* findNode(int targetData);
+        BinaryNode* popNode(BinaryNode* nodeToPop);
     private:
         BinaryNode* root;
         int count;
@@ -100,6 +113,53 @@ void BinaryTree::inorderTraversal_Recur(BinaryNode* node){
     std::cout << node->getData() << std::endl;
     inorderTraversal_Recur(node->getRight());
 };
+BinaryNode* BinaryTree::findNode(int targetData){
+    BinaryNode* node = root;
+    while (node){
+        if (node->getData() == targetData)
+            return node;
+        if (node->getData() > targetData){
+            if (node->getLeft())
+                node = node->getLeft();
+            else
+                return nullptr;
+        } else if (node->getData() < targetData) {
+            if (node->getRight())
+                node = node->getRight();
+            else
+                return nullptr;
+        }
+    }
+    return nullptr;
+};
+
+/*
+     IN PROGRESS...
+ */
+BinaryNode* BinaryTree::popNode(BinaryNode* nodeToPop){
+    BinaryNode *node, *previous = root;
+//    while (node){
+//        if (node == nodeToPop)
+//            return node;
+//        if (node->getData() > targetData){
+//            if (node->getLeft())
+//                node = node->getLeft();
+//            else
+//                return nullptr;
+//        } else if (node->getData() < targetData) {
+//            if (node->getRight())
+//                node = node->getRight();
+//            else
+//                return nullptr;
+//        }
+//    }
+    return nullptr;
+//    if (nodeToPop->getLeft())
+//
+//    if (nodeToPop->getRight())
+//
+//    return nodeToPop;
+}
 
 int main(){
     BinaryTree tree = 0;
@@ -122,7 +182,11 @@ int main(){
     tree.addNode(&dupNegTwo);
     tree.addNode(&dupNegThree);
     tree.inorderTraversal();
-    
+    BinaryNode* node1 = tree.findNode(2);
+    BinaryNode* node2 = tree.findNode(18);
+    helpers::print(node1);
+    helpers::print(node2);
+
     // this isn't working correctly. will fix.
     tree.getCount();
     
