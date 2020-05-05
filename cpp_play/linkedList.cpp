@@ -34,7 +34,7 @@ LinkedListNode* LinkedListNode::getNode() {return this;};
 LinkedListNode* LinkedListNode::getNext(){return next;}
 void LinkedListNode::setNext(LinkedListNode* newNext){ next = newNext;};
 LinkedListNode* LinkedListNode::operator++(){
-    return getNext();
+    return next;
 };
 
 class LinkedList {
@@ -84,22 +84,36 @@ void LinkedList::addNode(LinkedListNode* newNode){
         tail = newNode;
     }
 };
-// this is broken!
 void LinkedList::removeNode(LinkedListNode* node){
-    if (node){
-        if (node == head)
-            head = node->getNext();
-        else{
-            LinkedListNode* it = head;
-            LinkedListNode* prev = head;
-            while (it){
-                if (it == node)
-                    if (LinkedListNode* newNext = it->getNext()){
-                        // i don't need an else here if getNext returns a nullptr
-                        prev->setNext(newNext);
+    // check to make sure the list is not empty.
+    if (head){
+        // check to see that a nullptr hasn't been passed-in.
+        if (node){
+            // check to see if the passed-in node is the same as the head.
+            if (node == head)
+                // if the node is the same as the head
+                // set the head to the head's next node.
+                head = head->getNext();
+            else{
+                // if the desired node to be removed is not the head
+                // we need to iterate through the whole list
+                // (even if the desired node is the tail).
+                
+                // set an iterator node pointer and a previous node pointer
+                // that points to the last iterator node
+                LinkedListNode* it = head;
+                LinkedListNode* prev = head;
+                while (it){
+                    if (it == node && it != tail){
+                        prev->setNext(it->getNext());
+                        break;
+                    } else if (it == node && it == tail) {
+                        prev->setNext(nullptr);
                         break;
                     }
-                it++;
+                    prev = it;
+                    it = it->getNext();
+                }
             }
         }
     }
@@ -160,9 +174,15 @@ LinkedList* LinkedList::findAllNodes(int data){
 };
 void LinkedList::printList(){
     LinkedListNode* node = head;
+    int i = 0;
     while (node){
         std::cout << node->getData() << std::endl;
         node = node->getNext();
+//        if (i > 100){
+//            std::cout << node << std::endl;
+//            break;
+//        }
+
     }
         std::cout << " " << std::endl;
 };
@@ -177,11 +197,16 @@ int main(){
     myll.addNode(3);
     myll.addNode(4);
     myll.addNode(5);
+    LinkedListNode one = LinkedListNode(1);
+    myll.addNode(&one);
     LinkedListNode two = LinkedListNode(2);
     myll.addNode(&two);
-    //    BROKEN!
-    //    myll.removeNode(&two);
     myll.printList();
+    LinkedListNode* heyo = one.operator++(); // this syntax: "one++" does not work...
+    helpers::print(heyo->getData());
+
+//    myll.removeNode(&one);
+//    myll.printList();
     //    BROKEN!
 //    LinkedListNode* found = myll.findOneNode(3);
 //    helpers::print(found);
@@ -191,8 +216,6 @@ int main(){
 /*
  
 need more testing:
-        LinkedListNode* LinkedListNode::operator++();
-        void LinkedList::removeNode(LinkedListNode* node);
         LinkedList* LinkedList::removeNodes(LinkedList* nodes);
         LinkedListNode* LinkedList::findOneNode(int data);
         LinkedList* LinkedList::findAllNodes(int data);

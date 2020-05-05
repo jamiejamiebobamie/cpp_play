@@ -25,15 +25,15 @@
  
 */
 
-int countSteps(int numSteps);
-int recurSteps(int numSteps, bool first);
+int countSteps(int numSteps, bool first);
+//int recurSteps(int numSteps, bool first);
 
 //int main(){
 ////    helpers::print(countSteps(0));
 ////    helpers::print(countSteps(1));
 ////    helpers::print(countSteps(2));
-//    helpers::print(countSteps(3));
-//    helpers::print(countSteps(4));
+//    helpers::print(countSteps(3, true));
+//    helpers::print(countSteps(4, true));
 ////    helpers::print(countSteps(5));
 ////    helpers::print(countSteps(6));
 //
@@ -41,18 +41,17 @@ int recurSteps(int numSteps, bool first);
 //}
 
 
-int countSteps(int numSteps){
-    int count = recurSteps(numSteps, true);
-    return count;
-};
+//int countSteps(int numSteps){
+//    int count = recurSteps(numSteps, true);
+//    return count;
+//};
 
-int recurSteps(int numSteps, bool first){
+int countSteps(int numSteps, bool first){
     if ((numSteps == 0 || numSteps == 1) and !first){
         return 1;
     }
     else if (numSteps < 0 || (numSteps == 0 and first))
         return 0;
     else
-        return recurSteps(numSteps - 1, false) + recurSteps(numSteps - 2, false) + recurSteps(numSteps - 3, false);
-    return numSteps;
+        return countSteps(numSteps - 1, false) + countSteps(numSteps - 2, false) + countSteps(numSteps - 3, false);
 };
