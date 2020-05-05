@@ -6,8 +6,6 @@
 //  Copyright © 2020 James McCrory. All rights reserved.
 //
 
-//class LinkedListNode {};
-
 #include<iostream>
 #include"helperFunctions.cpp"
 
@@ -19,6 +17,8 @@ public:
     int getData()const;
     LinkedListNode* getNode();
     LinkedListNode* getNext();
+    // syntax "one++" does not work.
+    // must use "objectVarName.operator++()"
     LinkedListNode* operator++();
     void setNext(LinkedListNode* newNext);
     
@@ -45,9 +45,11 @@ public:
     void addNode(int data);
     void addNode(LinkedListNode* newNode);
     void removeNode(LinkedListNode* node);
-    LinkedList* removeNodes(LinkedList* nodes);
+    void removeNodes(int data);
     LinkedListNode* findOneNode(int data);
     LinkedList* findAllNodes(int data);
+    void sortAscending();
+    void sortDescending();
     void printList();
 private:
     LinkedListNode* head;
@@ -112,52 +114,36 @@ void LinkedList::removeNode(LinkedListNode* node){
                         break;
                     }
                     prev = it;
-                    it = it->getNext();
+                    it = it->operator++();
                 }
             }
         }
     }
 };
-// pass in a linkedlist*
-// iterate through this* linkedlist and compare each node with the passed-in list.
-// remove nodes from this* linkedlist and passed-in linkedlist* if comparison = true.
-// return empty passed-in linkedlist* or list with remaining, unfound nodes.
-
-// making the assumption that passed-in linkedlist has been generated
-// by the findAllNodes method and is thus in the same order as this*.
-// PROBLEM: the findAllNodes method generates a new Linkedlist, but uses the same nodes
-// from the old one so you ruin the list that you are operating on, because the nodes' next variables
-// are being changed. need to use and return a different data structure (like an array / vector).
-LinkedList* LinkedList::removeNodes(LinkedList* nodes){
-    if (nodes){
-        LinkedListNode* it_passedIn = nodes->getHead();
-        LinkedListNode* it = head;
-            while (it_passedIn and it){
-                if (it == it_passedIn){
-                    removeNode(it);
-                    nodes->removeNode(it);
-                }
-                it++;
-                it_passedIn++;
-            }
+void LinkedList::removeNodes(int data){
+    LinkedListNode* node = head;
+    while (node){
+        if (data == node->getData()){
+            removeNode(node);
+        }
+        node = node->getNext();
     }
-    return nodes;
 };
 LinkedListNode* LinkedList::findOneNode(int data){
     if (head){
         if (data == head->getData())
             return head;
-    } else if (tail) {
+    }
+    if (tail) {
         if (data == tail->getData())
             return tail;
-    } else{
-        LinkedListNode* node = head;
-        while (node){
-            if (data == node->getData())
-                return node;
-            else
-                node = node->getNext();
-        }
+    }
+    LinkedListNode* node = head;
+    while (node){
+        if (data == node->getData())
+            return node;
+        else
+            node = node->getNext();
     }
     return nullptr;
 };
@@ -172,54 +158,111 @@ LinkedList* LinkedList::findAllNodes(int data){
     }
     return listOfNodesWithData;
 };
+void LinkedList::sortAscending(){
+    if (head){
+        bool sorted = false;
+        LinkedListNode *node, *prev, *prevPrev;
+        while(!sorted){
+            bool editedOrder = false;
+            node = head;
+            prev = head;
+            prevPrev = head;
+            while (node){
+                // bubble sort?
+                if (prev->getData() > node->getData()){
+                    // prev.next = node.next
+                    prev->setNext(node->getNext());
+                    // node.next = prev
+                    node->setNext(prev);
+                    // prevPrev.next = node
+                    prevPrev->setNext(node);
+                    editedOrder = true;
+                }
+                prevPrev = prev;
+                prev = node;
+                node = node->getNext();
+            }
+            if (!editedOrder)
+                sorted = true;
+        }
+    }
+};
+// IN PROGRESS...
+void LinkedList::sortDescending(){
+    if (head){
+        bool sorted = false;
+        LinkedListNode *node, *prev, *prevPrev;
+        while(!sorted){
+            bool editedOrder = false;
+            node = head;
+            prev = head;
+            prevPrev = head;
+            while (node){
+                // bubble sort?
+                if (prev->getData() < node->getData()){
+                    // 45322
+                    // prev.next = node.next // 4 points to 3
+                    // node.next = prev // 5 points to 4
+//                    if (prevPrev != prev)
+                        // prevPrev.next = node // 4 points to ..
+                    editedOrder = true;
+                }
+                prevPrev = prev;
+                prev = node;
+                node = node->getNext();
+            }
+            if (!editedOrder)
+                sorted = true;
+        }
+    }
+};
 void LinkedList::printList(){
     LinkedListNode* node = head;
-    int i = 0;
     while (node){
         std::cout << node->getData() << std::endl;
         node = node->getNext();
-//        if (i > 100){
-//            std::cout << node << std::endl;
-//            break;
-//        }
-
     }
-        std::cout << " " << std::endl;
+    std::cout << " " << std::endl;
 };
 
 
 int main(){
     LinkedList myll = LinkedList(1);
-    myll.addNode(1);
-    myll.addNode(1);
-    myll.addNode(1);
     myll.addNode(2);
     myll.addNode(3);
     myll.addNode(4);
     myll.addNode(5);
+    myll.addNode(1);
+    myll.addNode(1);
+    myll.addNode(1);
     LinkedListNode one = LinkedListNode(1);
     myll.addNode(&one);
     LinkedListNode two = LinkedListNode(2);
     myll.addNode(&two);
     myll.printList();
-    LinkedListNode* heyo = one.operator++(); // this syntax: "one++" does not work...
-    helpers::print(heyo->getData());
+    myll.removeNode(&one);
+    myll.printList();
+    LinkedListNode* found1 = myll.findOneNode(3);
+    helpers::print(found1->getData());
+    LinkedListNode* found2 = myll.findOneNode(45);
+    helpers::print(found2);
+    myll.removeNodes(1);
+    myll.printList();
+    myll.sortAscending();
+    myll.printList();
 
-//    myll.removeNode(&one);
+//  IN PROGRESS...
+//    myll.sortDescending();
 //    myll.printList();
-    //    BROKEN!
-//    LinkedListNode* found = myll.findOneNode(3);
-//    helpers::print(found);
-   
     
+    return 0;
     
 /*
  
 need more testing:
-        LinkedList* LinkedList::removeNodes(LinkedList* nodes);
-        LinkedListNode* LinkedList::findOneNode(int data);
-        LinkedList* LinkedList::findAllNodes(int data);
+        LinkedList* LinkedList::findAllNodes(int data); // new to C++...
+                                                        // need to find appropriate storage
+                                                        // and return type for a variable-sized
+                                                        // list of addresses.
  */
-    
-    return 0;
 }
