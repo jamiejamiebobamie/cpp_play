@@ -11,14 +11,13 @@
 
 template<class T>
 class LinkedListNode {
+    friend int operator+(LinkedListNode<T>& nodeToAdd);
 public:
     LinkedListNode();
     LinkedListNode(T newdata);
     T getData()const;
     void setData(T newdata);
     LinkedListNode<T>* getNext();
-    // syntax "one++" does not work.
-    // must use "objectVarName.operator++()"
     LinkedListNode* operator++();
     void setNext(LinkedListNode<T>* newNext);
     
@@ -42,11 +41,27 @@ template<class T>
 LinkedListNode<T>* LinkedListNode<T>::operator++(){
     return next;
 };
+// in progress friend function.
+template<class T>
+int operator+(LinkedListNode<T>& nodeToAdd){
+//    auto type = decltype(nodeToAdd->getData())
+//    auto anInt = decltype(3);
+//    auto aChar = decltype('c');
+//    auto aCharPointer = decltype("hello");
+//    switch (type)
+//    {
+//        case typeof(0):
+//        break;
+//    }
+    return 0;
+};
+
 template<class T>
 class LinkedList {
 public:
     LinkedList();
     LinkedList(T data);
+    LinkedList(LinkedListNode<T>* newNode);
     LinkedListNode<T>* getHead();
     void addNode(T data);
     void addNode(LinkedListNode<T>* newNode);
@@ -55,17 +70,21 @@ public:
     LinkedListNode<T>* findOneNode(T data);
     LinkedList<LinkedListNode<T>*>* findAllNodes(T data);
     void sort(bool ascending);
+    LinkedListNode<T>* operator[](int index);
+    LinkedList<LinkedListNode<T>*>* operator()(int indices...);
     void printList();
 private:
     LinkedListNode<T>* head;
     LinkedListNode<T>* tail;
-    // DON'T FORGET THIS!
+    // NEED TO IMPLEMENT.
     int len;
 };
 template<class T>
 LinkedList<T>::LinkedList() : head{nullptr}, tail{nullptr} {};
 template<class T>
 LinkedList<T>::LinkedList(T data) : head{new LinkedListNode<T>(data)}, tail{nullptr} {};
+template<class T>
+LinkedList<T>::LinkedList(LinkedListNode<T>* node) : head{node}, tail{nullptr} {};
 template<class T>
 LinkedListNode<T>*  LinkedList<T>::getHead(){
     return head;
@@ -199,7 +218,7 @@ void LinkedList<T>::sort(bool ascending){
             bool condition;
             while (curr){
                 // update condition based on "ascending" parameter bool and the new node pointers.
-                    // switch prev with curr. sort is in place.
+                    // switches prev with curr. sort is in place.
                 if (ascending)
                     condition = prev->getData() > curr->getData();
                 else
@@ -228,6 +247,57 @@ void LinkedList<T>::sort(bool ascending){
     }
 };
 template<class T>
+LinkedListNode<T>* LinkedList<T>::operator[](int index){
+    int count = 0;
+    LinkedListNode<T>* node = head;
+    while (node){
+        if (count == index)
+            return node;
+        else
+            node = node->getNext();
+        count++;
+    }
+    return nullptr;
+};
+/*
+    Variadic, overloaded () operator member function.
+    First argument is the number of indices passed to the function
+    All following arguments are the indices to return from the function.
+ */
+template<class T>
+LinkedList<LinkedListNode<T>*>* LinkedList<T>::operator()(int indicesCount...){
+    // the first parameter passed-in is held
+        // in 'indicesCount', the number of parameters to follow.
+    // initializes the list to hold
+        // the arguements of the variadic function.
+    va_list args;
+    // enables access to the arguments.
+    va_start(args, indicesCount);
+    // return linkedlist of linkedlistnode addresses
+    LinkedList<LinkedListNode<T>*>* listOfNodesByIndex = new
+    LinkedList<LinkedListNode<T>*>;
+    
+    // gets the next item from the list of parameters (in this case the second)
+    int nextIndex = va_arg(args, int);
+    for (int i = 0; i < indicesCount; i++){
+        LinkedListNode<T>* node = head;
+        int count = 0;
+        while (node){
+            if (nextIndex == count){
+                LinkedListNode<LinkedListNode<T>*>* newNode = new LinkedListNode<LinkedListNode<T>*>;
+                newNode->setData(node);
+                listOfNodesByIndex->addNode(newNode);
+            }
+            node = node->getNext();
+            count++;
+        }
+        nextIndex = va_arg(args, int);
+    }
+    // "ends traversal of the variadic function arguments "
+    va_end(args);
+    return listOfNodesByIndex;
+};
+template<class T>
 void LinkedList<T>::printList(){
     LinkedListNode<T>* node = head;
     while (node){
@@ -237,9 +307,9 @@ void LinkedList<T>::printList(){
     std::cout << " " << std::endl;
 };
 
-
 int main(){
-    LinkedList<int> myll = LinkedList<int>(3);
+    LinkedListNode<int> test = LinkedListNode<int>(7);
+    LinkedList<int> myll = LinkedList<int>(&test);
     myll.addNode(1);
     myll.addNode(1);
     myll.addNode(1);
@@ -265,13 +335,17 @@ int main(){
     myll.sort(ascending);
     myll.printList();
     
-    std::cout << "finding nodes" << std::endl;
+//    std::cout << "finding nodes" << std::endl;
+//
+//    LinkedList<LinkedListNode<int>*>* allNodesTwo = myll.findAllNodes(2);
+//    allNodesTwo->printList();
+//    myll.printList();
+//    helpers::print(&firstTwo);
+//    helpers::print(&secondTwo);
     
-    LinkedList<LinkedListNode<int>*>* allNodesTwo = myll.findAllNodes(2);
-    allNodesTwo->printList();
-    myll.printList();
-    helpers::print(&firstTwo);
-    helpers::print(&secondTwo);
+//    LinkedList<LinkedListNode<int>*>* nodesByIndex = myll(2,0,5);
+//    nodesByIndex->printList();
+//    helpers::print(myll[2]);
 
     return 0;
 }
