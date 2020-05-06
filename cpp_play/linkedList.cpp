@@ -9,59 +9,70 @@
 #include<iostream>
 #include"helperFunctions.cpp"
 
+template<class T>
 class LinkedListNode {
 public:
     LinkedListNode();
-    LinkedListNode(int newdata);
-    void setData(int newdata);
-    int getData()const;
-    LinkedListNode* getNode();
-    LinkedListNode* getNext();
+    LinkedListNode(T newdata);
+    T getData()const;
+    void setData(T newdata);
+    LinkedListNode<T>* getNext();
     // syntax "one++" does not work.
     // must use "objectVarName.operator++()"
     LinkedListNode* operator++();
-    void setNext(LinkedListNode* newNext);
+    void setNext(LinkedListNode<T>* newNext);
     
 private:
-    int data;
-    LinkedListNode* next;
+    T data;
+    LinkedListNode<T>* next;
 };
-LinkedListNode::LinkedListNode():data{0}, next{nullptr} {};
-LinkedListNode::LinkedListNode(int newdata) : data{newdata}, next{nullptr} {};
-void LinkedListNode::setData(int newData) {data=newData;};
-int LinkedListNode::getData()const {return data;};
-LinkedListNode* LinkedListNode::getNode() {return this;};
-LinkedListNode* LinkedListNode::getNext(){return next;}
-void LinkedListNode::setNext(LinkedListNode* newNext){ next = newNext;};
-LinkedListNode* LinkedListNode::operator++(){
+template<class T>
+LinkedListNode<T>::LinkedListNode():data{0}, next{nullptr} {};
+template<class T>
+LinkedListNode<T>::LinkedListNode(T newdata) : data{newdata}, next{nullptr} {};
+template<class T>
+T LinkedListNode<T>::getData()const {return data;};
+template<class T>
+void LinkedListNode<T>::setData(T newData) {data=newData;};
+template<class T>
+LinkedListNode<T>* LinkedListNode<T>::getNext(){return next;};
+template<class T>
+void LinkedListNode<T>::setNext(LinkedListNode<T>* newNext){ next = newNext;};
+template<class T>
+LinkedListNode<T>* LinkedListNode<T>::operator++(){
     return next;
 };
-
+template<class T>
 class LinkedList {
 public:
     LinkedList();
-    LinkedList(int data);
-    LinkedListNode* getHead();
-    void addNode(int data);
-    void addNode(LinkedListNode* newNode);
-    void removeNode(LinkedListNode* node);
-    void removeNodes(int data);
-    LinkedListNode* findOneNode(int data);
-    LinkedList* findAllNodes(int data);
+    LinkedList(T data);
+    LinkedListNode<T>* getHead();
+    void addNode(T data);
+    void addNode(LinkedListNode<T>* newNode);
+    void removeNode(LinkedListNode<T>* node);
+    void removeNodes(T data);
+    LinkedListNode<T>* findOneNode(T data);
+    LinkedList<LinkedListNode<T>*>* findAllNodes(T data);
     void sort(bool ascending);
     void printList();
 private:
-    LinkedListNode* head;
-    LinkedListNode* tail;
+    LinkedListNode<T>* head;
+    LinkedListNode<T>* tail;
+    // DON'T FORGET THIS!
     int len;
 };
-LinkedList::LinkedList() : head{nullptr}, tail{nullptr} {};
-LinkedList::LinkedList(int data) : head{new LinkedListNode(data)}, tail{nullptr} {};
-LinkedListNode* LinkedList::getHead(){
+template<class T>
+LinkedList<T>::LinkedList() : head{nullptr}, tail{nullptr} {};
+template<class T>
+LinkedList<T>::LinkedList(T data) : head{new LinkedListNode<T>(data)}, tail{nullptr} {};
+template<class T>
+LinkedListNode<T>*  LinkedList<T>::getHead(){
     return head;
 };
-void LinkedList::addNode(int data){
-    LinkedListNode* newNode = new LinkedListNode(data);
+template<class T>
+void LinkedList<T>::addNode(T data){
+    LinkedListNode<T>* newNode = new LinkedListNode<T>(data);
     if (!head)
         head = newNode;
     else if (!tail){
@@ -73,7 +84,8 @@ void LinkedList::addNode(int data){
         tail = newNode;
     }
 };
-void LinkedList::addNode(LinkedListNode* newNode){
+template<class T>
+void LinkedList<T>::addNode(LinkedListNode<T>* newNode){
     if (!head)
         head = newNode;
     else if (!tail){
@@ -85,7 +97,8 @@ void LinkedList::addNode(LinkedListNode* newNode){
         tail = newNode;
     }
 };
-void LinkedList::removeNode(LinkedListNode* node){
+template<class T>
+void LinkedList<T>::removeNode(LinkedListNode<T>* node){
     // check to make sure the list is not empty.
     if (head){
         // check to see that a nullptr hasn't been passed-in.
@@ -102,8 +115,8 @@ void LinkedList::removeNode(LinkedListNode* node){
                 
                 // set an iterator node pointer and a previous node pointer
                 // that points to the last iterator node
-                LinkedListNode* curr = head;
-                LinkedListNode* prev = head;
+                LinkedListNode<T>* curr = head;
+                LinkedListNode<T>* prev = head;
                 while (curr){
                     if (curr == node && curr != tail){
                         prev->setNext(curr->getNext());
@@ -113,14 +126,17 @@ void LinkedList::removeNode(LinkedListNode* node){
                         break;
                     }
                     prev = curr;
-                    curr = curr->operator++(); // curr = curr->getNext(); // works too.
+                    // curr = curr->getNext();
+                        // works too.
+                    curr = curr->operator++();
                 }
             }
         }
     }
 };
-void LinkedList::removeNodes(int data){
-    LinkedListNode* node = head;
+template<class T>
+void LinkedList<T>::removeNodes(T data){
+    LinkedListNode<T>* node = head;
     while (node){
         if (data == node->getData()){
             removeNode(node);
@@ -128,7 +144,8 @@ void LinkedList::removeNodes(int data){
         node = node->getNext();
     }
 };
-LinkedListNode* LinkedList::findOneNode(int data){
+template<class T>
+LinkedListNode<T>* LinkedList<T>::findOneNode(T data){
     if (head){
         if (data == head->getData())
             return head;
@@ -137,7 +154,7 @@ LinkedListNode* LinkedList::findOneNode(int data){
         if (data == tail->getData())
             return tail;
     }
-    LinkedListNode* node = head;
+    LinkedListNode<T>* node = head;
     while (node){
         if (data == node->getData())
             return node;
@@ -146,24 +163,31 @@ LinkedListNode* LinkedList::findOneNode(int data){
     }
     return nullptr;
 };
-LinkedList* LinkedList::findAllNodes(int data){
-    LinkedList* listOfNodesWithData = new LinkedList;
-    LinkedListNode* node = head;
+template<class T>
+LinkedList<LinkedListNode<T>*>* LinkedList<T>::findAllNodes(T data){
+    // i want to create a linked list with data that are references of the nodes.
+    LinkedList<LinkedListNode<T>*>* listOfNodesWithDataPointers = new LinkedList<LinkedListNode<T>*>;
+    // if i make a new linked list and pass in llnodes with addNode method
+        // the nodes being passed in will have their next data members changed.
+    LinkedListNode<T>* node = head;
     while (node){
-        if (data == node->getData())
-            listOfNodesWithData->addNode(node);
-        else
-            node = node->getNext();
+        if (data == node->getData()){
+            LinkedListNode<LinkedListNode<T>*>* newNode = new LinkedListNode<LinkedListNode<T>*>;
+            newNode->setData(node);
+            listOfNodesWithDataPointers->addNode(newNode);
+        }
+        node = node->getNext();
     }
-    return listOfNodesWithData;
+    return listOfNodesWithDataPointers;
 };
-void LinkedList::sort(bool ascending){
+template<class T>
+void LinkedList<T>::sort(bool ascending){
     // check that a nullptr wasn't passed in.
     if (head){
         // initialize a bool to false to control sorting while loop.
         bool sorted = false;
         // initialize LinkedListNode pointers.
-        LinkedListNode *prev, *curr, *prevPrev;
+        LinkedListNode<T> *prev, *curr, *prevPrev;
         while(!sorted){
             // breaks  the sordid "sorted" loop
             bool editedOrder = false;
@@ -203,8 +227,9 @@ void LinkedList::sort(bool ascending){
         }
     }
 };
-void LinkedList::printList(){
-    LinkedListNode* node = head;
+template<class T>
+void LinkedList<T>::printList(){
+    LinkedListNode<T>* node = head;
     while (node){
         std::cout << node->getData() << std::endl;
         node = node->getNext();
@@ -214,21 +239,21 @@ void LinkedList::printList(){
 
 
 int main(){
-    LinkedList myll = LinkedList(3);
+    LinkedList<int> myll = LinkedList<int>(3);
     myll.addNode(1);
     myll.addNode(1);
     myll.addNode(1);
-    myll.addNode(2);
+    myll.addNode(1);
     myll.addNode(3);
     myll.addNode(4);
     myll.addNode(5);
-    LinkedListNode one = LinkedListNode(1);
-    myll.addNode(&one);
-    LinkedListNode two = LinkedListNode(2);
-    myll.addNode(&two);
-    myll.printList();
-
-    myll.removeNode(&one);
+    myll.addNode(1);
+    
+    LinkedListNode<int> firstTwo = LinkedListNode<int>(2);
+    myll.addNode(&firstTwo);
+    LinkedListNode<int> secondTwo = LinkedListNode<int>(2);
+    myll.addNode(&secondTwo);
+    
     myll.printList();
     myll.removeNodes(1);
     myll.printList();
@@ -240,14 +265,13 @@ int main(){
     myll.sort(ascending);
     myll.printList();
     
-    return 0;
+    std::cout << "finding nodes" << std::endl;
     
-/*
- 
-need more testing:
-        LinkedList* LinkedList::findAllNodes(int data); // new to C++...
-                                                        // need to find appropriate storage
-                                                        // and return type for a variable-sized
-                                                        // list of addresses.
- */
+    LinkedList<LinkedListNode<int>*>* allNodesTwo = myll.findAllNodes(2);
+    allNodesTwo->printList();
+    myll.printList();
+    helpers::print(&firstTwo);
+    helpers::print(&secondTwo);
+
+    return 0;
 }
