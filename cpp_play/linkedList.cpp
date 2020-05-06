@@ -48,8 +48,7 @@ public:
     void removeNodes(int data);
     LinkedListNode* findOneNode(int data);
     LinkedList* findAllNodes(int data);
-    void sortAscending();
-    void sortDescending();
+    void sort(bool ascending);
     void printList();
 private:
     LinkedListNode* head;
@@ -103,18 +102,18 @@ void LinkedList::removeNode(LinkedListNode* node){
                 
                 // set an iterator node pointer and a previous node pointer
                 // that points to the last iterator node
-                LinkedListNode* it = head;
+                LinkedListNode* curr = head;
                 LinkedListNode* prev = head;
-                while (it){
-                    if (it == node && it != tail){
-                        prev->setNext(it->getNext());
+                while (curr){
+                    if (curr == node && curr != tail){
+                        prev->setNext(curr->getNext());
                         break;
-                    } else if (it == node && it == tail) {
+                    } else if (curr == node && curr == tail) {
                         prev->setNext(nullptr);
                         break;
                     }
-                    prev = it;
-                    it = it->operator++();
+                    prev = curr;
+                    curr = curr->operator++(); // curr = curr->getNext(); // works too.
                 }
             }
         }
@@ -158,58 +157,46 @@ LinkedList* LinkedList::findAllNodes(int data){
     }
     return listOfNodesWithData;
 };
-void LinkedList::sortAscending(){
+void LinkedList::sort(bool ascending){
+    // check that a nullptr wasn't passed in.
     if (head){
+        // initialize a bool to false to control sorting while loop.
         bool sorted = false;
-        LinkedListNode *node, *prev, *prevPrev;
+        // initialize LinkedListNode pointers.
+        LinkedListNode *prev, *curr, *prevPrev;
         while(!sorted){
+            // breaks  the sordid "sorted" loop
             bool editedOrder = false;
-            node = head;
-            prev = head;
+            // prev == prevPrev pointing to the same node controls whether or not to update the head.
             prevPrev = head;
-            while (node){
-                // bubble sort?
-                if (prev->getData() > node->getData()){
-                    // prev.next = node.next
-                    prev->setNext(node->getNext());
-                    // node.next = prev
-                    node->setNext(prev);
-                    // prevPrev.next = node
-                    prevPrev->setNext(node);
+            prev = head;
+            curr = head->getNext();
+            // the condition to check whether or not we want the list in ascendign order or descending order.
+            bool condition;
+            while (curr){
+                // update condition based on "ascending" parameter bool and the new node pointers.
+                    // switch prev with curr. sort is in place.
+                if (ascending)
+                    condition = prev->getData() > curr->getData();
+                else
+                    condition = prev->getData() < curr->getData();
+                if (condition){
+                    // set prev.next to curr.next
+                    prev->setNext(curr->getNext());
+                    // set curr.next to prev
+                    curr->setNext(prev);
+                    // if prevPrev != prev
+                    if (prevPrev != prev)
+                        // set prevPrev.next to curr
+                        prevPrev->setNext(curr);
+                    else
+                        // set the curr to the head.
+                        head = curr;
                     editedOrder = true;
                 }
                 prevPrev = prev;
-                prev = node;
-                node = node->getNext();
-            }
-            if (!editedOrder)
-                sorted = true;
-        }
-    }
-};
-// IN PROGRESS...
-void LinkedList::sortDescending(){
-    if (head){
-        bool sorted = false;
-        LinkedListNode *node, *prev, *prevPrev;
-        while(!sorted){
-            bool editedOrder = false;
-            node = head;
-            prev = head;
-            prevPrev = head;
-            while (node){
-                // bubble sort?
-                if (prev->getData() < node->getData()){
-                    // 45322
-                    // prev.next = node.next // 4 points to 3
-                    // node.next = prev // 5 points to 4
-//                    if (prevPrev != prev)
-                        // prevPrev.next = node // 4 points to ..
-                    editedOrder = true;
-                }
-                prevPrev = prev;
-                prev = node;
-                node = node->getNext();
+                prev = curr;
+                curr = curr->getNext();
             }
             if (!editedOrder)
                 sorted = true;
@@ -227,33 +214,31 @@ void LinkedList::printList(){
 
 
 int main(){
-    LinkedList myll = LinkedList(1);
+    LinkedList myll = LinkedList(3);
+    myll.addNode(1);
+    myll.addNode(1);
+    myll.addNode(1);
     myll.addNode(2);
     myll.addNode(3);
     myll.addNode(4);
     myll.addNode(5);
-    myll.addNode(1);
-    myll.addNode(1);
-    myll.addNode(1);
     LinkedListNode one = LinkedListNode(1);
     myll.addNode(&one);
     LinkedListNode two = LinkedListNode(2);
     myll.addNode(&two);
     myll.printList();
+
     myll.removeNode(&one);
     myll.printList();
-    LinkedListNode* found1 = myll.findOneNode(3);
-    helpers::print(found1->getData());
-    LinkedListNode* found2 = myll.findOneNode(45);
-    helpers::print(found2);
     myll.removeNodes(1);
     myll.printList();
-    myll.sortAscending();
+    
+    bool ascending = true;
+    myll.sort(ascending);
     myll.printList();
-
-//  IN PROGRESS...
-//    myll.sortDescending();
-//    myll.printList();
+    ascending = false;
+    myll.sort(ascending);
+    myll.printList();
     
     return 0;
     
