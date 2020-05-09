@@ -6,10 +6,13 @@
 //  Copyright © 2020 James McCrory. All rights reserved.
 //
 
-//#include <iostream>
-//
-//int main() {
-//    std::cout << "Hello, World!\n";
-//    std::cin.get();
-//    return 0;
-//}
+#include <iostream>
+#include "lambdaFunctions.cpp"
+#include "helperFunctions.cpp"
+#include<string>
+
+int main() {
+
+            
+    return 0;
+}
