@@ -63,8 +63,6 @@ public:
     LinkedList(T data);
     LinkedList(LinkedListNode<T>* newNode);
     LinkedListNode<T>* getHead()const;
-    void setHead(LinkedListNode<T>* newHead);
-    void setTail(LinkedListNode<T>* newTail);
     void append(T data);
     void append(LinkedListNode<T>* newNode);
     void prepend(T data);
@@ -99,10 +97,6 @@ template<class T>
 LinkedListNode<T>*  LinkedList<T>::getHead()const{
     return head;
 };
-template<class T>
-void LinkedList<T>::setHead(LinkedListNode<T>* newHead){ head = newHead;};
-template<class T>
-void LinkedList<T>::setTail(LinkedListNode<T>* newTail){tail = newTail;}
 template<class T>
 void LinkedList<T>::append(T data){
     LinkedListNode<T>* newNode = new LinkedListNode<T>(data);
@@ -353,7 +347,7 @@ bool LinkedList<T>::insertAtIndex(int index, T data){
         LinkedListNode<T>* prev = operator[](index-1);
         prev->setNext(newNode);
     } else {
-        setHead(newNode);
+        head = newNode;
     }
     newNode->setNext(currNodeAtIndex);
     return true;
