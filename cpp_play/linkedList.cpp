@@ -457,71 +457,71 @@ void LinkedList<T>::printList(){
     std::cout << " " << std::endl;
 };
 
-int main(){
-    LinkedListNode<int> test = LinkedListNode<int>(7);
-    LinkedList<int> myll = LinkedList<int>(&test);
-    myll.append(1);
-    myll.append(1);
-    myll.append(1);
-    myll.append(1);
-    myll.append(3);
-    myll.append(4);
-    myll.append(5);
-    myll.append(1);
-    
-    LinkedListNode<int> firstTwo = LinkedListNode<int>(2);
-    myll.append(&firstTwo);
-    LinkedListNode<int> secondTwo = LinkedListNode<int>(2);
-    myll.append(&secondTwo);
-    
-    myll.printList();
-    myll.removeNodes(1);
-    myll.printList();
-    
-    bool ascending = true;
-    myll.sort(ascending);
-    myll.printList();
-    ascending = false;
-    myll.sort(ascending);
-    myll.printList();
-
-    std::cout << "finding nodes" << std::endl;
-
-    LinkedList<LinkedListNode<int>*>* allNodesTwo = myll.findAllNodes(2);
-    allNodesTwo->printList();
-    myll.printList();
-    helpers::print(&firstTwo);
-    helpers::print(&secondTwo);
-
-    LinkedList<LinkedListNode<int>*>* nodesByIndex = myll(2,0,5);
-    nodesByIndex->printList();
-    helpers::print(myll[2]);
-    
-    myll.replace(2,5);
-    myll.printList();
-
-    myll.insertAtIndex(5,5);
-    myll.printList();
-    myll.prepend(30);
-    myll.printList();
-    
-    myll.rotateCounterClockwiseByK(1);
-    myll.prepend(30);
-    myll.append(30);
-    myll.append(30);
-
-    helpers::print("");
-    helpers::print(myll.getMiddle()->getData());
-    helpers::print("");
-    myll.printList();
-    
-    myll.reverse();
-    myll.printList();
-    
-    ascending = true;
-    myll.sort(ascending);
-    
-    myll.printList();
-
-    return 0;
-}
+//int main(){
+//    LinkedListNode<int> test = LinkedListNode<int>(7);
+//    LinkedList<int> myll = LinkedList<int>(&test);
+//    myll.append(1);
+//    myll.append(1);
+//    myll.append(1);
+//    myll.append(1);
+//    myll.append(3);
+//    myll.append(4);
+//    myll.append(5);
+//    myll.append(1);
+//    
+//    LinkedListNode<int> firstTwo = LinkedListNode<int>(2);
+//    myll.append(&firstTwo);
+//    LinkedListNode<int> secondTwo = LinkedListNode<int>(2);
+//    myll.append(&secondTwo);
+//    
+//    myll.printList();
+//    myll.removeNodes(1);
+//    myll.printList();
+//    
+//    bool ascending = true;
+//    myll.sort(ascending);
+//    myll.printList();
+//    ascending = false;
+//    myll.sort(ascending);
+//    myll.printList();
+//
+//    std::cout << "finding nodes" << std::endl;
+//
+//    LinkedList<LinkedListNode<int>*>* allNodesTwo = myll.findAllNodes(2);
+//    allNodesTwo->printList();
+//    myll.printList();
+//    helpers::print(&firstTwo);
+//    helpers::print(&secondTwo);
+//
+//    LinkedList<LinkedListNode<int>*>* nodesByIndex = myll(2,0,5);
+//    nodesByIndex->printList();
+//    helpers::print(myll[2]);
+//    
+//    myll.replace(2,5);
+//    myll.printList();
+//
+//    myll.insertAtIndex(5,5);
+//    myll.printList();
+//    myll.prepend(30);
+//    myll.printList();
+//    
+//    myll.rotateCounterClockwiseByK(1);
+//    myll.prepend(30);
+//    myll.append(30);
+//    myll.append(30);
+//
+//    helpers::print("");
+//    helpers::print(myll.getMiddle()->getData());
+//    helpers::print("");
+//    myll.printList();
+//    
+//    myll.reverse();
+//    myll.printList();
+//    
+//    ascending = true;
+//    myll.sort(ascending);
+//    
+//    myll.printList();
+//
+//    return 0;
+//}

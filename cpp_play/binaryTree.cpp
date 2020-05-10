@@ -10,7 +10,6 @@
 #include"helperFunctions.cpp"
 
 class BinaryNode {
-//    friend bool operator==(const BinaryNode&, const BinaryNode&);
     public:
         BinaryNode();
         BinaryNode(int);
@@ -21,6 +20,14 @@ class BinaryNode {
         void setLeft(BinaryNode*);
         void setRight(BinaryNode*);
         void setData(int);
+        
+        // implement________
+        bool isLeaf();
+        bool isBranch();
+        int height();
+        int height_RecurHelper();
+        // _________________
+    
     private:
         BinaryNode* left;
         BinaryNode* right;
@@ -28,7 +35,6 @@ class BinaryNode {
 };
 BinaryNode::BinaryNode(): data{0}, left{nullptr}, right{nullptr} {};
 BinaryNode::BinaryNode(int data) : data{data}, left{nullptr}, right{nullptr} {};
-// in case i want to do a multiple assignment. do i need to worry about memberwise assignment with the pointer member variables in this instance?
 BinaryNode* BinaryNode::operator=(const BinaryNode&){return this;};
 BinaryNode* BinaryNode::getLeft(){return left;};
 BinaryNode* BinaryNode::getRight(){return right;};
@@ -37,13 +43,6 @@ void BinaryNode::setRight(BinaryNode* node){right = node;};
 void BinaryNode::setData(int newData){data = newData;};
 int BinaryNode::getData(){return data;};
 
-//bool operator==(const BinaryNode& firstNode, const BinaryNode& secondNode){
-//    if(firstNode == secondNode)
-//        return true;
-//    else
-//        return false;
-//};
-
 class BinaryTree {
     public:
         void incrementCount();
@@ -51,16 +50,46 @@ class BinaryTree {
         BinaryTree();
         BinaryTree(int data);
         BinaryTree(BinaryNode*);
+    
+        // implement________
+        BinaryTree(BinaryNode*[]);
+        BinaryTree(int[]);
+        // _________________
+    
         BinaryNode* getRoot();
         void setRoot(int);
         void setRoot(BinaryNode*);
         int getCount();
-        void addNode(BinaryNode*);
-        void addNode(int);
+
+    
+    // implement________
+        bool isEmpty();
+        int height();
+        BinaryNode* findNode(int targetData);
+    //        BinaryNode* findNode(int item);
+        BinaryNode* findNode_Recur(int item);
+        BinaryNode* findParent(int targetData);
+    //        BinaryNode* findNode(int item);
+        BinaryNode* findParent_Recur(int item, BinaryNode* parentNode);
+        bool contains(int item);
+        BinaryNode* getNode(int item);
+        bool insert(int item);
         void inorderTraversal_Recur(BinaryNode* node);
         void inorderTraversal();
-        BinaryNode* findNode(int targetData);
+    //        void inorderTraversal();
+        void postorderTraversal_Recur(BinaryNode* node);
+        void postorderTraversal();
+        void preorderTraversal_Recur(BinaryNode* node);
+        void preorderTraversal();
+        void levelOrderTraversal();
+        void printInorder();
+        void printPostorder();
+        void printPreorder();
+        void printLevelOrder();
         BinaryNode* popNode(BinaryNode* nodeToPop);
+        bool remove(int item);
+    // _________________
+
     private:
         BinaryNode* root;
         int count;
@@ -74,33 +103,6 @@ int BinaryTree::getCount(){return count;};
 BinaryNode* BinaryTree::getRoot(){return root;};
 void BinaryTree::setRoot(BinaryNode* node){if (!root)incrementCount(); root = node; };
 void BinaryTree::setRoot(int data){if (!root)incrementCount(); root = new BinaryNode(data);};
-void BinaryTree::addNode(BinaryNode* newNode){
-    BinaryNode* node = root;
-    while (node){
-        if (node->getData() >= newNode->getData()){
-            if (node->getLeft()){
-                node = node->getLeft();
-            }
-            else{
-                node->setLeft(newNode);
-                break;
-            }
-        } else if (node->getData() < newNode->getData()) {
-            if (node->getRight()){
-                node = node->getRight();
-            }
-            else{
-                node->setRight(newNode);
-                break;
-            }
-        }
-    }
-    incrementCount();
-};
-void BinaryTree::addNode(int data){
-    BinaryNode* newNode = new BinaryNode(data);
-    addNode(newNode);
-};
 void BinaryTree::inorderTraversal(){
     BinaryNode* node = root;
     inorderTraversal_Recur(node);
@@ -131,63 +133,19 @@ BinaryNode* BinaryTree::findNode(int targetData){
     }
     return nullptr;
 };
-
-/*
-     IN PROGRESS...
- */
-BinaryNode* BinaryTree::popNode(BinaryNode* nodeToPop){
-    BinaryNode *node, *previous = root;
-//    while (node){
-//        if (node == nodeToPop)
-//            return node;
-//        if (node->getData() > targetData){
-//            if (node->getLeft())
-//                node = node->getLeft();
-//            else
-//                return nullptr;
-//        } else if (node->getData() < targetData) {
-//            if (node->getRight())
-//                node = node->getRight();
-//            else
-//                return nullptr;
-//        }
-//    }
-    return nullptr;
-//    if (nodeToPop->getLeft())
-//
-//    if (nodeToPop->getRight())
-//
-//    return nodeToPop;
+int main(){
+    BinaryTree tree = 0;
+    
+    BinaryNode one = BinaryNode(1);
+    BinaryNode two = BinaryNode(2);
+    BinaryNode three = 3;
+    BinaryNode negOne = BinaryNode(-1);
+    BinaryNode negTwo = BinaryNode(-2);
+    BinaryNode negThree = -3;
+    BinaryNode dupNegTwo = BinaryNode(-2);
+    BinaryNode dupNegThree = -3;
+    
+    
+    return 0;
 }
 
-//int main(){
-//    BinaryTree tree = 0;
-//    
-//    BinaryNode one = BinaryNode(1);
-//    BinaryNode two = BinaryNode(2);
-//    BinaryNode three = 3;
-//    tree.addNode(&one);
-//    tree.addNode(&two);
-//    tree.addNode(&three);
-//    tree.addNode(4);
-//    BinaryNode negOne = BinaryNode(-1);
-//    BinaryNode negTwo = BinaryNode(-2);
-//    BinaryNode negThree = -3;
-//    BinaryNode dupNegTwo = BinaryNode(-2);
-//    BinaryNode dupNegThree = -3;
-//    tree.addNode(&negOne);
-//    tree.addNode(&negTwo);
-//    tree.addNode(&negThree);
-//    tree.addNode(&dupNegTwo);
-//    tree.addNode(&dupNegThree);
-//    tree.inorderTraversal();
-//    BinaryNode* node1 = tree.findNode(2);
-//    BinaryNode* node2 = tree.findNode(18);
-//    helpers::print(node1);
-//    helpers::print(node2);
-//
-//    // this isn't working correctly. will fix.
-//    tree.getCount();
-//    
-//    return 0;
-//}
