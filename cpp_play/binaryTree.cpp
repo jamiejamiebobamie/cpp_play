@@ -20,7 +20,6 @@ class BinaryNode {
         void setLeft(BinaryNode*);
         void setRight(BinaryNode*);
         void setData(int);
-        
         bool isLeaf();
         bool isBranch();
         int height(); // not sure... needs testing.
@@ -105,7 +104,7 @@ class BinaryTree {
 
     private:
         BinaryNode* root;
-        int count;
+        int count; // NOT IMPLEMENTED.
 };
 void BinaryTree::incrementCount(){count++;};
 void BinaryTree::decrementCount(){count--;};
@@ -141,17 +140,11 @@ bool BinaryTree::contains(BinaryNode* newNode){
 };
 void BinaryTree::recurInsertHelper(BinaryNode* node, BinaryNode* newNode){
     if (node != nullptr){
-        // if the current node's data is greater than the newNode's data
-        // check if there is a node present to the left
-        // if there is recur, if not add the new node as the left child
         if (node->getData() > newNode->getData())
             if (node->getLeft())
                 recurInsertHelper(node->getLeft(), newNode);
             else
                 node->setLeft(newNode);
-        // the current node's data is less than the newNode's data
-        // check if there is a node present to the right
-        // if there is recur, if not add the new node as the right child
         else
             if (node->getRight())
                 recurInsertHelper(node->getRight(), newNode);
