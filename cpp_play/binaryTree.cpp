@@ -60,7 +60,7 @@ int BinaryNode::height(){
     return std::max(height_RecurHelper(count, left), height_RecurHelper(count, right));
 }
 
-class BinaryTree {
+class BinarySearchTree {
     public:
         void incrementCount();
         void decrementCount();
@@ -75,15 +75,15 @@ class BinaryTree {
         bool insert(int item);
     
         bool insert(BinaryNode* newNode);
-        BinaryTree();
-        BinaryTree(int data);
-        BinaryTree(BinaryNode*);
+        BinarySearchTree();
+        BinarySearchTree(int data);
+        BinarySearchTree(BinaryNode*);
         BinaryNode* getRoot();
         void setRoot(int);
         void setRoot(BinaryNode*);
         int getCount();
-        BinaryTree(BinaryNode* nodes[], int len);
-        BinaryTree(int items[], int len);
+        BinarySearchTree(BinaryNode* nodes[], int len);
+        BinarySearchTree(int items[], int len);
         bool isEmpty();
         int height();
         BinaryNode* findNodeIterative(int targetData);
@@ -106,9 +106,9 @@ class BinaryTree {
         BinaryNode* root;
         int count; // NOT IMPLEMENTED.
 };
-void BinaryTree::incrementCount(){count++;};
-void BinaryTree::decrementCount(){count--;};
-bool BinaryTree::recurContainsHelper(BinaryNode* node, int item){
+void BinarySearchTree::incrementCount(){count++;};
+void BinarySearchTree::decrementCount(){count--;};
+bool BinarySearchTree::recurContainsHelper(BinaryNode* node, int item){
     if (node != nullptr){
         if (node->getData() == item)
             return true;
@@ -117,13 +117,13 @@ bool BinaryTree::recurContainsHelper(BinaryNode* node, int item){
     }
     return false;
 };
-bool BinaryTree::contains(int item){
+bool BinarySearchTree::contains(int item){
     if (root != nullptr){
         return recurContainsHelper(root->getLeft(), item) || recurContainsHelper(root->getRight(), item);
     }
     return false;
 };
-bool BinaryTree::recurContainsHelper(BinaryNode* node, BinaryNode* newNode){
+bool BinarySearchTree::recurContainsHelper(BinaryNode* node, BinaryNode* newNode){
     if (node != nullptr){
         if (node->getData() == newNode->getData())
             return true;
@@ -132,13 +132,13 @@ bool BinaryTree::recurContainsHelper(BinaryNode* node, BinaryNode* newNode){
     }
     return false;
 };
-bool BinaryTree::contains(BinaryNode* newNode){
+bool BinarySearchTree::contains(BinaryNode* newNode){
     if (root != nullptr){
         return recurContainsHelper(root->getLeft(), newNode) || recurContainsHelper(root->getRight(), newNode);
     }
     return false;
 };
-void BinaryTree::recurInsertHelper(BinaryNode* node, BinaryNode* newNode){
+void BinarySearchTree::recurInsertHelper(BinaryNode* node, BinaryNode* newNode){
     if (node != nullptr){
         if (node->getData() > newNode->getData())
             if (node->getLeft())
@@ -152,7 +152,7 @@ void BinaryTree::recurInsertHelper(BinaryNode* node, BinaryNode* newNode){
                 node->setRight(newNode);
     }
 };
-bool BinaryTree::insert(int item){
+bool BinarySearchTree::insert(int item){
     bool itemAlreadyPresent = contains(item);
     if (!itemAlreadyPresent){
         BinaryNode* newNode = new BinaryNode(item);
@@ -160,35 +160,35 @@ bool BinaryTree::insert(int item){
     }
     return itemAlreadyPresent;
 };
-bool BinaryTree::insert(BinaryNode* newNode){
+bool BinarySearchTree::insert(BinaryNode* newNode){
     bool itemAlreadyPresent = contains(newNode);
     if (!itemAlreadyPresent){
         recurInsertHelper(root, newNode);
     }
     return itemAlreadyPresent;
 };
-BinaryTree::BinaryTree(): count{0} {root = new BinaryNode();};
-BinaryTree::BinaryTree(BinaryNode* root): root{root}, count{0} {};
-int BinaryTree::getCount(){return count;};
-BinaryNode* BinaryTree::getRoot(){return root;};
-void BinaryTree::setRoot(BinaryNode* node){if (!root)incrementCount(); root = node; };
-void BinaryTree::setRoot(int data){if (!root)incrementCount(); root = new BinaryNode(data);};
-BinaryTree::BinaryTree(int data){root = new BinaryNode(data);};
-BinaryTree::BinaryTree(BinaryNode* nodes[], int len){
+BinarySearchTree::BinarySearchTree(): count{0} {root = new BinaryNode();};
+BinarySearchTree::BinarySearchTree(BinaryNode* root): root{root}, count{0} {};
+int BinarySearchTree::getCount(){return count;};
+BinaryNode* BinarySearchTree::getRoot(){return root;};
+void BinarySearchTree::setRoot(BinaryNode* node){if (!root)incrementCount(); root = node; };
+void BinarySearchTree::setRoot(int data){if (!root)incrementCount(); root = new BinaryNode(data);};
+BinarySearchTree::BinarySearchTree(int data){root = new BinaryNode(data);};
+BinarySearchTree::BinarySearchTree(BinaryNode* nodes[], int len){
     for (int i = 0; i < len; i++)
         insert(nodes[i]);
 };
-BinaryTree::BinaryTree(int items[], int len){
+BinarySearchTree::BinarySearchTree(int items[], int len){
     for (int i = 0; i < len; i++)
         insert(items[i]);
 };
-bool BinaryTree::isEmpty(){
+bool BinarySearchTree::isEmpty(){
     return root == nullptr;
 };
-int BinaryTree::height(){
+int BinarySearchTree::height(){
     return root->height();
 };
-BinaryNode* BinaryTree::findNodeIterative(int targetData){
+BinaryNode* BinarySearchTree::findNodeIterative(int targetData){
     BinaryNode* node = root;
     while (node){
         if (node->getData() == targetData)
@@ -207,7 +207,7 @@ BinaryNode* BinaryTree::findNodeIterative(int targetData){
     }
     return nullptr;
 };
-BinaryNode* BinaryTree::recurFindHelper(BinaryNode* node, int item){
+BinaryNode* BinarySearchTree::recurFindHelper(BinaryNode* node, int item){
     if (node != nullptr){
         if (node->getData() == item)
             return node;
@@ -216,11 +216,11 @@ BinaryNode* BinaryTree::recurFindHelper(BinaryNode* node, int item){
     }
     return nullptr;
 };
-BinaryNode* BinaryTree::findNodeRecursive(int targetData){
+BinaryNode* BinarySearchTree::findNodeRecursive(int targetData){
     BinaryNode* targetNode = recurFindHelper(root, targetData);
     return targetNode;
 };
-BinaryNode* BinaryTree::recurFindParentHelper(BinaryNode* node, BinaryNode* parentNode, int item){
+BinaryNode* BinarySearchTree::recurFindParentHelper(BinaryNode* node, BinaryNode* parentNode, int item){
     if (node != nullptr)
         if (node->getData()){
             return parentNode;
@@ -229,16 +229,19 @@ BinaryNode* BinaryTree::recurFindParentHelper(BinaryNode* node, BinaryNode* pare
         recurFindParentHelper(node->getRight(), node, item);
     return nullptr;
 };
-BinaryNode* BinaryTree::findParent(int item){
+BinaryNode* BinarySearchTree::findParent(int item){
     return recurFindParentHelper(root, nullptr, item);
 };
-BinaryNode* BinaryTree::popNode(int item){
-    BinaryNode* targetNode = findNodeRecursive(item);
-    remove(item);
+BinaryNode* BinarySearchTree::popNode(int item){
+    bool itemIsInTree = contains(item);
+    BinaryNode* targetNode = nullptr;
+    if (itemIsInTree){
+        targetNode = findNodeRecursive(item);
+        remove(item);
+    }
     return targetNode;
 };
-// i really don't think this works. need to test.
-BinaryNode* BinaryTree::recurRemoveHelper(BinaryNode* node, BinaryNode* minOrMaxNodeOfSubtree, bool right){
+BinaryNode* BinarySearchTree::recurRemoveHelper(BinaryNode* node, BinaryNode* minOrMaxNodeOfSubtree, bool right){
     if (node){
         bool condition;
         if (right)
@@ -252,11 +255,12 @@ BinaryNode* BinaryTree::recurRemoveHelper(BinaryNode* node, BinaryNode* minOrMax
     }
     return minOrMaxNodeOfSubtree;
 };
-bool BinaryTree::remove(int item){
+// i really don't think this works. need to test.
+bool BinarySearchTree::remove(int item){
     bool itemIsInTree = contains(item);
     if (itemIsInTree){
         BinaryNode* targetNode = findNodeRecursive(item);
-        BinaryNode* minNodeOfSubTree = nullptr;
+        BinaryNode* minOrMaxNodeOfSubtree = nullptr;
         if (targetNode->isLeaf()) {
             BinaryNode* parentOfTargetNode = findParent(item);
             if (parentOfTargetNode->getLeft()->getData() == item)
@@ -265,61 +269,60 @@ bool BinaryTree::remove(int item){
                 parentOfTargetNode->setRight(nullptr);
         } else {
                 if (targetNode->getRight())
-                    BinaryNode* minNodeOfSubTree = recurRemoveHelper(targetNode, nullptr, true);
+                    minOrMaxNodeOfSubtree = recurRemoveHelper(targetNode, nullptr, true);
                 else
-                    BinaryNode* minNodeOfSubTree = recurRemoveHelper(targetNode, nullptr, false);
+                    minOrMaxNodeOfSubtree = recurRemoveHelper(targetNode, nullptr, false);
             }
-        if (minNodeOfSubTree){
+        if (minOrMaxNodeOfSubtree){
             BinaryNode* rootLeft = root->getLeft();
             BinaryNode* rootRight = root->getRight();
-            minNodeOfSubTree->setLeft(rootLeft);
-            minNodeOfSubTree->setRight(rootRight);
+            minOrMaxNodeOfSubtree->setLeft(rootLeft);
+            minOrMaxNodeOfSubtree->setRight(rootRight);
             root->setLeft(nullptr);
             root->setRight(nullptr);
         }
-        // change the root if it was the targetNode for removal.
         if (targetNode == root){
-            if (minNodeOfSubTree)
-                root = minNodeOfSubTree;
+            if (minOrMaxNodeOfSubtree)
+                root = minOrMaxNodeOfSubtree;
             else
                 root = nullptr;
         }
     }
     return itemIsInTree;
 };
-void BinaryTree::recurInorderTraversalHelper(BinaryNode* node){
+void BinarySearchTree::recurInorderTraversalHelper(BinaryNode* node){
     if (!node)
         return;
     recurInorderTraversalHelper(node->getLeft());
     std::cout << node->getData() << std::endl;
     recurInorderTraversalHelper(node->getRight());
 };
-void BinaryTree::inorderTraversal(){
+void BinarySearchTree::inorderTraversal(){
     BinaryNode* node = root;
     recurInorderTraversalHelper(node);
 };
-void BinaryTree::recurPostorderTraversalHelper(BinaryNode* node){
+void BinarySearchTree::recurPostorderTraversalHelper(BinaryNode* node){
     if (!node)
         return;
     recurPostorderTraversalHelper(node->getLeft());
     recurPostorderTraversalHelper(node->getRight());
     std::cout << node->getData() << std::endl;
 };
-void BinaryTree::postorderTraversal(){
+void BinarySearchTree::postorderTraversal(){
     BinaryNode* node = root;
     recurPostorderTraversalHelper(node);
 };
-void BinaryTree::recurPreorderTraversalHelper(BinaryNode* node){
+void BinarySearchTree::recurPreorderTraversalHelper(BinaryNode* node){
     if (!node)
         return;
     std::cout << node->getData() << std::endl;
     recurPreorderTraversalHelper(node->getLeft());
     recurPreorderTraversalHelper(node->getRight());
 };
-void BinaryTree::preorderTraversal(){
+void BinarySearchTree::preorderTraversal(){
     BinaryNode* node = root;
     recurPreorderTraversalHelper(node);
 };
-void BinaryTree::levelOrderTraversal(){
+void BinarySearchTree::levelOrderTraversal(){
     // need to write a Queue class.
 };
