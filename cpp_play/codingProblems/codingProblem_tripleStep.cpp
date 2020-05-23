@@ -7,7 +7,7 @@
 //
 
 #include <stdio.h>
-#include "./cpp_play/helperFunctions.cpp"
+//#include "./cpp_play/helperFunctions.cpp"
 #include<list>
 /*
     # Triple Step: A child is running up a staircase with n steps

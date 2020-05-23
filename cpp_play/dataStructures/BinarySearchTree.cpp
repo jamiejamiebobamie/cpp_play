@@ -7,7 +7,8 @@
 //
 
 #include<iostream>
-#include"helperFunctions.cpp"
+//#include"helperFunctions.cpp"
+#include"LinkedList.cpp"
 
 class BinaryNode {
     public:
@@ -100,6 +101,7 @@ class BinarySearchTree {
         void postorderTraversal();
         void recurPreorderTraversalHelper(BinaryNode* node);
         void preorderTraversal();
+        void recurLevelOrderTraversalHelper(BinaryNode* node, LinkedList<int>* queue);
         void levelOrderTraversal();
 
     private:
@@ -323,6 +325,17 @@ void BinarySearchTree::preorderTraversal(){
     BinaryNode* node = root;
     recurPreorderTraversalHelper(node);
 };
+ void BinarySearchTree::recurLevelOrderTraversalHelper(BinaryNode* node, LinkedList<int>* queue){
+     if (node){
+         queue->append(node->getLeft()->getData());
+         queue->append(node->getRight()->getData());
+         recurLevelOrderTraversalHelper(node->getLeft(),queue);
+         recurLevelOrderTraversalHelper(node->getRight(),queue);
+     }
+}
 void BinarySearchTree::levelOrderTraversal(){
-    // need to write a Queue class.
+    LinkedList<int> queue = LinkedList<int>();
+    queue.append(root->getData());
+    recurLevelOrderTraversalHelper(root,&queue);
+    queue.printList();
 };

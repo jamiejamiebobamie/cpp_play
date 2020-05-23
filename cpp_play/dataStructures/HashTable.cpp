@@ -6,207 +6,194 @@
 //  Copyright © 2020 James McCrory. All rights reserved.
 //
 
-#!python
-
-from linkedlist import LinkedList, Node
-
 //https://github.com/jamiejamiebobamie/CS-1.3-Core-Data-Structures/blob/master/Lessons/source/hashtable.py
 
-/*
-class HashTable(object):
+#include <iostream>
+#include "LinkedList.cpp"
 
-    def __init__(self, init_size=8):
-        """Initialize this hash table with the given initial size."""
-        self.buckets = [LinkedList() for i in range(init_size)]
-        self.size = 0  # Number of key-value entries
+template<class K, class V>
+struct HashTableEntry{
+    K *key;
+    V *value;
+    int hashCode;
+};
 
-    def __str__(self):
-        """Return a formatted string representation of this hash table."""
-        items = ['{!r}: {!r}'.format(key, val) for key, val in self.items()]
-        return '{' + ', '.join(items) + '}'
-
-    def __repr__(self):
-        """Return a string representation of this hash table."""
-        return 'HashTable({!r})'.format(self.items())
-
-    def _bucket_index(self, key):
-        """Return the bucket index where the given key would be stored."""
-        return hash(key) % len(self.buckets)
-
-    def load_factor(self):
-        """Return the load factor, the ratio of number of entries to buckets.
-        Best and worst case running time: ??? under what conditions? [TODO]"""
-        return float(self.size)/float(len(self.buckets)) if self.size else 0
-
-    def keys(self):
-        """Return a list of all keys in this hash table.
-        Running time: O(n)"""
-        all_keys = []
-        for bucket in self.buckets:
-            for key, value in bucket.items():
-                all_keys.append(key)
-        return all_keys
-
-    def values(self):
-        """Return a list of all values in this hash table.
-        Running time: O(n)"""
-        all_values = []
-        for bucket in self.buckets:
-            for key, value in bucket.items():
-                all_values.append(value)
-        return all_values
-
-    def items(self):
-        """Return a list of all entries (key-value pairs) in this hash table.
-        Running time: O(n)"""
-        all_items = []
-        for bucket in self.buckets:
-            all_items.extend(bucket.items())
-        return all_items
-
-    def length(self):
-        """Return the number of key-value entries by traversing its buckets.
-        Running time: O(n)"""
-        return sum(bucket.length() for bucket in self.buckets)
-
-    def contains(self, key):
-        """Return True if this hash table contains the given key, or False.
-        Best case running time: Omega(1) if item is near the head of the list.
-        Worst case running time: O(n) if item is near the tail of the list or
-        not present and we need to loop through all n nodes in the list."""
-        # Find the bucket the given key belongs in
-        index = self._bucket_index(key)
-        bucket = self.buckets[index]
-
-        # Check if an entry with the given key exists in that bucket
-        #ASK IN CLASS!!
-        entry = bucket.find(lambda key_value: key_value[0] == key)
-        #ASK IN CLASS!!
-
-        return entry is not None  # True or False
-
-    def get(self, key):
-        """Return the value associated with the given key, or raise KeyError.
-        Best case running time: Omega(1) if item is near the head of the list.
-        Worst case running time: O(n) if item is near the tail of the list or
-        not present and we need to loop through all n nodes in the list."""
-        # Find the bucket the given key belongs in
-        index = self._bucket_index(key)
-        bucket = self.buckets[index]
-        # Find the entry with the given key in that bucket, if one exists
-        entry = bucket.find(lambda key_value: key_value[0] == key)
-        if entry is not None:  # Found
-            # Return the given key's associated value
-            assert isinstance(entry, tuple)
-            assert len(entry) == 2
-            return entry[1]
-        else:  # Not found
-            raise KeyError('Key not found: {}'.format(key))
-
-    def set(self, key, value):
-        """Insert or update the given key with its associated value.
-        Best case running time: Omega(1) if item is near the head of the list.
-        Worst case running time: O(4n) if item is near the tail of the list or
-        not present and we need to loop through all n nodes in the list."""
-        # Find the bucket the given key belongs in
-        index = self._bucket_index(key)
-        bucket = self.buckets[index]
-        # Find the entry with the given key in that bucket, if one exists
-        # Check if an entry with the given key exists in that bucket
-        entry = bucket.find(lambda key_value: key_value[0] == key)
-        if entry is not None:  # Found
-            # In this case, the given key's value is being updated
-            # Remove the old key-value entry from the bucket first
-            bucket.delete(entry)
-            self.size-=1
-        # Insert the new key-value entry into the bucket in either case
-        bucket.append((key, value))
-        self.size+=1
-        if self.load_factor() > 0.75:
-            self._resize()
-
-    def delete(self, key):
-        """Delete the given key and its associated value, or raise KeyError.
-        Best case running time: O(1)
-        Worst case running time: O(n)"""
-        # Find the bucket the given key belongs in
-        index = self._bucket_index(key)
-        bucket = self.buckets[index]
-        # Find the entry with the given key in that bucket, if one exists
-        entry = bucket.find(lambda key_value: key_value[0] == key)
-        if entry is not None:  # Found
-            # Remove the key-value entry from the bucket
-            bucket.delete(entry)
-            self.size-=1
-        else:  # Not found
-            raise KeyError('Key not found: {}'.format(key))
-
-    def _resize(self, new_size=None):
-        """Resize this hash table's buckets and rehash all key-value entries.
-        Should be called automatically when load factor exceeds a threshold
-        such as 0.75 after an insertion (when set is called with a new key).
-        Best and worst case running time: O(n) ito iterate over all the elements."""
-        # If unspecified, choose new size dynamically based on current size
-        if new_size is None:
-            new_size = len(self.buckets) * 2  # Double size
-        # Option to reduce size if buckets are sparsely filled (low load factor)
-        elif new_size is 0:
-            new_size = len(self.buckets) / 2  # Half size
-
-        temp_items = self.items()
-
-        self.buckets = [LinkedList() for i in range(new_size)]
-        for key, value in temp_items:
-            self.buckets[self._bucket_index(key)].append((key,value))
-
-
-
-def test_hash_table():
-    ht = HashTable(4)
-    print('HashTable: ' + str(ht))
-
-    print('Setting entries:')
-    ht.set('I', 1)
-    print('set(I, 1): ' + str(ht))
-    ht.set('V', 5)
-    print('set(V, 5): ' + str(ht))
-    print('size: ' + str(ht.size))
-    print('length: ' + str(ht.length()))
-    print('buckets: ' + str(len(ht.buckets)))
-    print('load_factor: ' + str(ht.load_factor()))
-    ht.set('X', 10)
-    print('set(X, 10): ' + str(ht))
-    ht.set('L', 50)  # Should trigger resize
-    print('set(L, 50): ' + str(ht))
-    print('size: ' + str(ht.size))
-    print('length: ' + str(ht.length()))
-    print('buckets: ' + str(len(ht.buckets)))
-    print('load_factor: ' + str(ht.load_factor()))
-
-    print('Getting entries:')
-    print('get(I): ' + str(ht.get('I')))
-    print('get(V): ' + str(ht.get('V')))
-    print('get(X): ' + str(ht.get('X')))
-    print('get(L): ' + str(ht.get('L')))
-    print('contains(X): ' + str(ht.contains('X')))
-    print('contains(Z): ' + str(ht.contains('Z')))
-
-    print('Deleting entries:')
-    ht.delete('I')
-    print('delete(I): ' + str(ht))
-    ht.delete('V')
-    print('delete(V): ' + str(ht))
-    ht.delete('X')
-    print('delete(X): ' + str(ht))
-    ht.delete('L')
-    print('delete(L): ' + str(ht))
-    print('contains(X): ' + str(ht.contains('X')))
-    print('size: ' + str(ht.size))
-    print('length: ' + str(ht.length()))
-    print('buckets: ' + str(len(ht.buckets)))
-    print('load_factor: ' + str(ht.load_factor()))
-
-
-if __name__ == '__main__':
-    test_hash_table()
-*/
+template<class K, class V>
+class HashTable{
+public:
+    HashTable(int maxSize);
+    const size_t hashKey(K key);
+    int bucketIndex(K key);
+    int loadFactor();
+    void printAllKeys();
+    void printAllValues();
+    int length();
+    bool contains(K key);
+    V get(K key);
+    void set(K key, V value);
+    void deleteEntry(K key);
+    void resize();
+private:
+    // !!!...not implemented...!!!
+    int currentSize; // number of buckets with at least one entry.
+    int maxSize; // max number of buckets
+    LinkedList<HashTableEntry<K, V>*>* buckets[];
+};
+template<class K, class V>
+HashTable<K,V>::HashTable(int maxSize): maxSize(maxSize), currentSize(0) {
+    for (int i = 0; i < maxSize; i++ ){
+        buckets[i] = new LinkedList<HashTableEntry<K, V>*>;
+    }
+};
+template<class K, class V>
+const size_t HashTable<K,V>::hashKey(K key){
+    std::hash<K> h;
+    const size_t value = h(key);
+    return value;
+};
+template<class K, class V>
+int HashTable<K,V>::bucketIndex(K key){
+    return hashKey(key) % maxSize;
+};
+template<class K, class V>
+int HashTable<K,V>::loadFactor(){
+    if (!currentSize)
+        return currentSize;
+    else
+        return float(currentSize)/float(maxSize);
+}
+template<class K, class V>
+void HashTable<K,V>::printAllKeys(){
+    if (!currentSize){
+        std::cout << "No items in HashTable" << std::endl;
+        return;
+    }
+    for (int i = 0; i < maxSize; i++ ){
+        LinkedListNode<HashTableEntry<K, V>*>* node = buckets[i].getHead();
+        while(node){
+            std::cout << &(node->getData()->key) << std::endl;
+            node = node->getNext();
+        }
+    }
+}
+template<class K, class V>
+void HashTable<K,V>::printAllValues(){
+    if (!currentSize){
+        std::cout << "No items in HashTable" << std::endl;
+        return;
+    }
+    for (int i = 0; i < maxSize; i++ ){
+        LinkedListNode<HashTableEntry<K, V>*>* node = buckets[i].getHead();
+        while(node){
+            std::cout << &(node->getData()->value) << std::endl;
+            node = node->getNext();
+        }
+    }
+}
+template<class K, class V>
+int HashTable<K,V>::length(){
+    if (!currentSize){
+        return 0;
+    }
+    int length = 0;
+    for (int i = 0; i < maxSize; i++ ){
+        LinkedListNode<HashTableEntry<K, V>*>* node = buckets[i].getHead();
+        while(node){
+            length++;
+            node = node->getNext();
+        }
+    }
+    return length;
+}
+template<class K, class V>
+bool HashTable<K,V>::contains(K key){
+    if (!currentSize){
+        return false;
+    }
+    int index = bucketIndex(key);
+    LinkedListNode<HashTableEntry<K, V>*>* node = buckets[index]->getHead();
+    while(node){
+        if (node->getData()->key == key)
+            return true;
+        node = node->getNext();
+    }
+    return false;
+};
+template<class K, class V>
+V HashTable<K,V>::get(K key){
+    if (!currentSize){
+        return nullptr;
+    }
+    int index = bucketIndex(key);
+    LinkedListNode<HashTableEntry< K, V>*>* node = buckets[index]->getHead();
+    while(node){
+        K nodeKey = &(node->getData()->key);
+        if (nodeKey == key)
+            return &(node->getData()->value);
+        node = node->getNext();
+    }
+    return nullptr;
+};
+template<class K, class V>
+void HashTable<K,V>::set(K key, V value){
+    struct HashTableEntry<K,V>* newEntry = new struct HashTableEntry<K,V>;
+    newEntry->key = key;
+    newEntry->value = value;
+    newEntry->hash = hashKey(key);
+    int index = bucketIndex(key);
+    LinkedListNode<HashTableEntry< K, V>*>* node = buckets[index]->getHead();
+    while(node){
+        K nodeKey = &(node->getData()->key);
+        if (nodeKey == key){
+            buckets[index]->removeNode(node);
+            resize();
+            break;
+        }
+        node = node->getNext();
+    }
+    buckets[index]->append(newEntry);
+};
+template<class K, class V>
+void HashTable<K,V>::deleteEntry(K key){
+    if (!currentSize){
+        return;
+    }
+    int index = bucketIndex(key);
+    LinkedListNode<HashTableEntry< K, V>*>* node = buckets[index]->getHead();
+    while(node){
+        K nodeKey = &(node->getData()->key);
+        if (nodeKey == key){
+            buckets[index]->removeNode(node);
+            resize();
+            break;
+        }
+        node = node->getNext();
+    }
+    std::cout << "entry not found" << std::endl;
+};
+// IN PROGRESS...
+template<class K, class V>
+void HashTable<K,V>::resize(){
+    // i don't think i need to cast both to floats to get a float...
+    float loadSize = float(currentSize)/float(maxSize);
+    if (loadSize > .75){
+        
+    } else if (loadSize < .25) {
+        
+    }
+    
+//    .75
+//    if new_size is None:
+//        new_size = len(self.buckets) * 2  # Double size
+//    # Option to reduce size if buckets are sparsely filled (low load factor)
+//    elif new_size is 0:
+//        new_size = len(self.buckets) / 2  # Half size
+//
+//    temp_items = self.items()
+//
+//    self.buckets = [LinkedList() for i in range(new_size)]
+//    for key, value in temp_items:
+//        self.buckets[self._bucket_index(key)].append((key,value))
+    
+    
+};

@@ -13,6 +13,13 @@
 
 int main() {
 
-            
+    std::hash<const char*> h;
+    const char* hi = "hello";
+    const char* bye = "bubye";
+
+    const size_t value1 = h(hi);
+    const size_t value2 = h(bye);
+    std::cout << value1 << " " << value2 << std::endl;
+    
     return 0;
 }

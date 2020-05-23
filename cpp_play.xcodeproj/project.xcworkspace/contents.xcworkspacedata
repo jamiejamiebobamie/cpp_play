@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workspace
    version = "1.0">
+   <Group
+      location = "group:../cpp_play/codingProblems"
+      name = "codingProblems">
+   </Group>
+   <Group
+      location = "group:/Users/jamesmccrory/new_dev/cpp_play/cpp_play/builtins"
+      name = "builtins">
+   </Group>
+   <Group
+      location = "group:/Users/jamesmccrory/new_dev/cpp_play/cpp_play/std"
+      name = "std">
+   </Group>
+   <Group
+      location = "group:/Users/jamesmccrory/new_dev/cpp_play/cpp_play/dataStructures"
+      name = "dataStructures">
+   </Group>
    <FileRef
-      location = "self:cpp_play.xcodeproj">
+      location = "self:">
    </FileRef>
 </Workspace>

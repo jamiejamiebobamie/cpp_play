@@ -7,8 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A12C76A2476627C00928CDB /* HashTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A12C7682476627C00928CDB /* HashTable.cpp */; };
 		0A7276B6245A83A000348BB2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A7276B5245A83A000348BB2 /* main.cpp */; };
 		0A7276BE245A846C00348BB2 /* c_string.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A7276BC245A846C00348BB2 /* c_string.cpp */; };
+		0AD0EE1624650B240008E26A /* codingProblem_findWordIn2DArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0AD0EE1424650B240008E26A /* codingProblem_findWordIn2DArray.cpp */; };
+		0AD0EE1B24663FB20008E26A /* lambdaFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0AD0EE1924663FB20008E26A /* lambdaFunctions.cpp */; };
+		0AD15095245B2E0D008F3E6A /* stdStringClass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0AD15093245B2E0D008F3E6A /* stdStringClass.cpp */; };
+		0AD1509C245B33E8008F3E6A /* helperFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0AD1509A245B33E8008F3E6A /* helperFunctions.cpp */; };
+		0ADAF2E8245FC4C7006BFE68 /* codingProblem_tripleStep.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0ADAF2E7245FC4C7006BFE68 /* codingProblem_tripleStep.cpp */; };
+		0ADAF2EB2460AE20006BFE68 /* LinkedList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0ADAF2E92460AE20006BFE68 /* LinkedList.cpp */; };
+		0AEE3091245E8AFD00197894 /* pointers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0AEE308F245E8AFD00197894 /* pointers.cpp */; };
+		0AEE3094245E945A00197894 /* BinarySearchTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0AEE3092245E945A00197894 /* BinarySearchTree.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,10 +33,24 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0A12C7682476627C00928CDB /* HashTable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HashTable.cpp; sourceTree = "<group>"; };
 		0A7276B2245A83A000348BB2 /* cpp_play */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = cpp_play; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A7276B5245A83A000348BB2 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		0A7276BC245A846C00348BB2 /* c_string.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = c_string.cpp; sourceTree = "<group>"; };
+		0A7276BC245A846C00348BB2 /* c_string.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = c_string.cpp; path = ../c_string.cpp; sourceTree = "<group>"; };
 		0A7276BD245A846C00348BB2 /* c_string.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = c_string.hpp; sourceTree = "<group>"; };
+		0AD0EE1424650B240008E26A /* codingProblem_findWordIn2DArray.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = codingProblem_findWordIn2DArray.cpp; sourceTree = "<group>"; };
+		0AD0EE1524650B240008E26A /* codingProblem_findWordIn2DArray.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = codingProblem_findWordIn2DArray.hpp; sourceTree = "<group>"; };
+		0AD0EE1924663FB20008E26A /* lambdaFunctions.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = lambdaFunctions.cpp; path = ../lambdaFunctions.cpp; sourceTree = "<group>"; };
+		0AD0EE1A24663FB20008E26A /* lambdaFunctions.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = lambdaFunctions.hpp; sourceTree = "<group>"; };
+		0AD15093245B2E0D008F3E6A /* stdStringClass.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = stdStringClass.cpp; path = ../../stdStringClass.cpp; sourceTree = "<group>"; };
+		0AD15094245B2E0D008F3E6A /* stdStringClass.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = stdStringClass.hpp; sourceTree = "<group>"; };
+		0AD1509A245B33E8008F3E6A /* helperFunctions.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = helperFunctions.cpp; sourceTree = "<group>"; };
+		0AD1509B245B33E8008F3E6A /* helperFunctions.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = helperFunctions.hpp; sourceTree = "<group>"; };
+		0ADAF2E7245FC4C7006BFE68 /* codingProblem_tripleStep.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = codingProblem_tripleStep.cpp; sourceTree = "<group>"; };
+		0ADAF2E92460AE20006BFE68 /* LinkedList.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LinkedList.cpp; sourceTree = "<group>"; };
+		0AEE308F245E8AFD00197894 /* pointers.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pointers.cpp; path = ../pointers.cpp; sourceTree = "<group>"; };
+		0AEE3090245E8AFD00197894 /* pointers.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = pointers.hpp; sourceTree = "<group>"; };
+		0AEE3092245E945A00197894 /* BinarySearchTree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BinarySearchTree.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +64,60 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0A12C7812476638C00928CDB /* headerFiles */ = {
+			isa = PBXGroup;
+			children = (
+				0AD0EE1524650B240008E26A /* codingProblem_findWordIn2DArray.hpp */,
+				0A7276BD245A846C00348BB2 /* c_string.hpp */,
+				0AEE3090245E8AFD00197894 /* pointers.hpp */,
+				0AD15094245B2E0D008F3E6A /* stdStringClass.hpp */,
+				0AD1509B245B33E8008F3E6A /* helperFunctions.hpp */,
+				0AD0EE1A24663FB20008E26A /* lambdaFunctions.hpp */,
+			);
+			path = headerFiles;
+			sourceTree = "<group>";
+		};
+		0A12C782247663DF00928CDB /* dataStructures */ = {
+			isa = PBXGroup;
+			children = (
+				0ADAF2E92460AE20006BFE68 /* LinkedList.cpp */,
+				0AEE3092245E945A00197894 /* BinarySearchTree.cpp */,
+				0A12C7682476627C00928CDB /* HashTable.cpp */,
+			);
+			name = dataStructures;
+			path = cpp_play/dataStructures;
+			sourceTree = SOURCE_ROOT;
+		};
+		0A12C7832476645700928CDB /* std */ = {
+			isa = PBXGroup;
+			children = (
+				0AD15093245B2E0D008F3E6A /* stdStringClass.cpp */,
+			);
+			name = std;
+			path = /Users/jamesmccrory/new_dev/cpp_play/cpp_play/dataStructures/std;
+			sourceTree = "<absolute>";
+		};
+		0A12C786247664C400928CDB /* builtins */ = {
+			isa = PBXGroup;
+			children = (
+				0AD0EE1924663FB20008E26A /* lambdaFunctions.cpp */,
+				0AEE308F245E8AFD00197894 /* pointers.cpp */,
+				0A7276BC245A846C00348BB2 /* c_string.cpp */,
+			);
+			name = builtins;
+			path = /Users/jamesmccrory/new_dev/cpp_play/cpp_play/builtins;
+			sourceTree = "<absolute>";
+		};
+		0A12C7872476652D00928CDB /* codingProblems */ = {
+			isa = PBXGroup;
+			children = (
+				0ADAF2E7245FC4C7006BFE68 /* codingProblem_tripleStep.cpp */,
+				0AD0EE1424650B240008E26A /* codingProblem_findWordIn2DArray.cpp */,
+			);
+			name = codingProblems;
+			path = cpp_play/codingProblems;
+			sourceTree = SOURCE_ROOT;
+		};
 		0A7276A9245A83A000348BB2 = {
 			isa = PBXGroup;
 			children = (
@@ -61,8 +138,12 @@
 			isa = PBXGroup;
 			children = (
 				0A7276B5245A83A000348BB2 /* main.cpp */,
-				0A7276BC245A846C00348BB2 /* c_string.cpp */,
-				0A7276BD245A846C00348BB2 /* c_string.hpp */,
+				0A12C7812476638C00928CDB /* headerFiles */,
+				0A12C782247663DF00928CDB /* dataStructures */,
+				0A12C786247664C400928CDB /* builtins */,
+				0A12C7832476645700928CDB /* std */,
+				0A12C7872476652D00928CDB /* codingProblems */,
+				0AD1509A245B33E8008F3E6A /* helperFunctions.cpp */,
 			);
 			path = cpp_play;
 			sourceTree = "<group>";
@@ -124,7 +205,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AEE3091245E8AFD00197894 /* pointers.cpp in Sources */,
 				0A7276BE245A846C00348BB2 /* c_string.cpp in Sources */,
+				0A12C76A2476627C00928CDB /* HashTable.cpp in Sources */,
+				0ADAF2EB2460AE20006BFE68 /* LinkedList.cpp in Sources */,
+				0AD1509C245B33E8008F3E6A /* helperFunctions.cpp in Sources */,
+				0AD15095245B2E0D008F3E6A /* stdStringClass.cpp in Sources */,
+				0ADAF2E8245FC4C7006BFE68 /* codingProblem_tripleStep.cpp in Sources */,
+				0AD0EE1624650B240008E26A /* codingProblem_findWordIn2DArray.cpp in Sources */,
+				0AD0EE1B24663FB20008E26A /* lambdaFunctions.cpp in Sources */,
+				0AEE3094245E945A00197894 /* BinarySearchTree.cpp in Sources */,
 				0A7276B6245A83A000348BB2 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
