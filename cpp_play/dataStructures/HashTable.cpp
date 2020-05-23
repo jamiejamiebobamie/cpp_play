@@ -27,6 +27,7 @@ public:
     int loadFactor();
     void printAllKeys();
     void printAllValues();
+    LinkedList<HashTableEntry<K,V>*>* getListOfItems();
     int length();
     bool contains(K key);
     V get(K key);
@@ -35,9 +36,9 @@ public:
     void resize();
 private:
     // !!!...not implemented...!!!
-    int currentSize; // number of buckets with at least one entry.
+    int currentSize; // number of buckets with at least one entry in the linkedlist.
     int maxSize; // max number of buckets
-    LinkedList<HashTableEntry<K, V>*>* buckets[];
+    LinkedList<HashTableEntry<K, V>*>* buckets;
 };
 template<class K, class V>
 HashTable<K,V>::HashTable(int maxSize): maxSize(maxSize), currentSize(0) {
@@ -91,6 +92,18 @@ void HashTable<K,V>::printAllValues(){
     }
 }
 template<class K, class V>
+LinkedList<HashTableEntry<K,V>*>* HashTable<K,V>::getListOfItems(){
+    LinkedList<HashTableEntry<K,V>*>* storeItemsList = new LinkedList<HashTableEntry<K,V>*>();
+    for (int i = 0; i < maxSize; i++ ){
+        LinkedListNode<HashTableEntry<K, V>*>* node = buckets[i].getHead();
+        while(node){
+            storeItemsList->append(node);
+            node = node->getNext();
+        }
+    }
+    return storeItemsList;
+}
+template<class K, class V>
 int HashTable<K,V>::length(){
     if (!currentSize){
         return 0;
@@ -136,7 +149,7 @@ V HashTable<K,V>::get(K key){
 };
 template<class K, class V>
 void HashTable<K,V>::set(K key, V value){
-    struct HashTableEntry<K,V>* newEntry = new struct HashTableEntry<K,V>;
+    HashTableEntry<K,V>* newEntry = new struct HashTableEntry<K,V>; // do i need the 'struct' keyword before the type declaration?
     newEntry->key = key;
     newEntry->value = value;
     newEntry->hash = hashKey(key);
@@ -151,6 +164,10 @@ void HashTable<K,V>::set(K key, V value){
         }
         node = node->getNext();
     }
+    // if the head is empty, the list is empty. increment the currentSize of the hashtable.
+        // as a new bucket has been filled.
+    if ( buckets[index]->getHead() == nullptr )
+        currentSize++;
     buckets[index]->append(newEntry);
 };
 template<class K, class V>
@@ -164,6 +181,11 @@ void HashTable<K,V>::deleteEntry(K key){
         K nodeKey = &(node->getData()->key);
         if (nodeKey == key){
             buckets[index]->removeNode(node);
+            // if after removing the node the head is empty, the list is empty.
+            // decrement the currentSize of the hashtable.
+                // as a bucket has just been opened.
+            if ( buckets[index]->getHead() == nullptr )
+                currentSize--;
             resize();
             break;
         }
@@ -171,29 +193,42 @@ void HashTable<K,V>::deleteEntry(K key){
     }
     std::cout << "entry not found" << std::endl;
 };
-// IN PROGRESS...
 template<class K, class V>
 void HashTable<K,V>::resize(){
     // i don't think i need to cast both to floats to get a float...
+    int newSize;
     float loadSize = float(currentSize)/float(maxSize);
+    LinkedList<HashTableEntry<K,V>*>* itemList = nullptr;
+    
+    if (loadSize < .25 || loadSize > .75)
+        itemList = getListOfItems();
+    else
+        return;
+    
     if (loadSize > .75){
-        
+        //double the size
+        newSize = maxSize * 2;
     } else if (loadSize < .25) {
-        
+        // half the size
+       newSize = maxSize / 2;
     }
+    for (int i = 0; i < maxSize; i++ ){
+        // a "starter" pointer to a series of linkedlist pointers
+        // that contain nodes to hashTableEntry pointers that contain
+        // fields of key and value pointers.
+        // i definitely have some memory leaks.
+        delete buckets[i];
+    }
+    maxSize = newSize;
+    for (int i = 0; i < maxSize; i++ ){
+        buckets[i] = new LinkedList<HashTableEntry<K, V>*>;
+    }
+    LinkedListNode<HashTableEntry<K,V>*>* node = itemList->getHead();
     
-//    .75
-//    if new_size is None:
-//        new_size = len(self.buckets) * 2  # Double size
-//    # Option to reduce size if buckets are sparsely filled (low load factor)
-//    elif new_size is 0:
-//        new_size = len(self.buckets) / 2  # Half size
-//
-//    temp_items = self.items()
-//
-//    self.buckets = [LinkedList() for i in range(new_size)]
-//    for key, value in temp_items:
-//        self.buckets[self._bucket_index(key)].append((key,value))
-    
-    
+    while(node){
+        K nodeKey = &(node->getData()->key);
+        V nodeValue = &(node->getData()->value);
+        set(nodeKey, nodeValue);
+    }
 };
+
