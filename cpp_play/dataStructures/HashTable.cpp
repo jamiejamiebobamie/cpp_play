@@ -32,6 +32,7 @@ public:
     bool contains(K key);
     V get(K key);
     void set(K key, V value);
+    void _set(K key, V value);
     void deleteEntry(K key);
     void resize();
     int getCurrentSize()const;
@@ -127,7 +128,7 @@ bool HashTable<K,V>::contains(K key){
         return false;
     }
     int index = bucketIndex(key);
-    LinkedListNode<HashTableEntry<K, V>*>* node = buckets[index]->getHead();
+    LinkedListNode<HashTableEntry<K, V>*>* node = buckets[index].getHead();
     while(node){
         if (node->getData()->key == key)
             return true;
@@ -157,6 +158,40 @@ void HashTable<K,V>::set(K key, V value){
     newEntry->value = value;
     newEntry->hashCode = hashKey(key);
     int index = bucketIndex(key);
+    if (contains(key)){
+        deleteEntry(key);
+    }
+//    LinkedListNode<HashTableEntry< K, V>*>* node = buckets[index].getHead();
+//    while(node){
+//        K nodeKey = node->getData()->key;
+//        if (nodeKey == key){
+//            buckets[index].removeNode(node);
+//            break;
+//        }
+//        node = node->getNext();
+//    }
+//    // if the head is empty, the list is empty. increment the currentSize of the hashtable.
+//        // as a new bucket has been filled.
+    if ( buckets[index].getHead() == nullptr )
+        currentSize++;
+    buckets[index].append(newEntry);
+    
+    // for testing
+//    std::cout << "setting " << key << std::endl;
+//    std::cout << "current # of buckets with items " << getCurrentSize() << std::endl;
+//    std::cout << "number of buckets " <<getMaxSize() << std::endl;
+//    std::cout << "load factor " << loadFactor() << std::endl;
+    
+    resize();
+};
+template<class K, class V>
+// internal set method triggered during a resize() that doesn't call resize()
+void HashTable<K,V>::_set(K key, V value){
+    HashTableEntry<K,V>* newEntry = new struct HashTableEntry<K,V>; // do i need the 'struct' keyword before the type declaration?
+    newEntry->key = key;
+    newEntry->value = value;
+    newEntry->hashCode = hashKey(key);
+    int index = bucketIndex(key);
     LinkedListNode<HashTableEntry< K, V>*>* node = buckets[index].getHead();
     while(node){
         K nodeKey = node->getData()->key;
@@ -171,7 +206,6 @@ void HashTable<K,V>::set(K key, V value){
     if ( buckets[index].getHead() == nullptr )
         currentSize++;
     buckets[index].append(newEntry);
-    resize();
 };
 template<class K, class V>
 void HashTable<K,V>::deleteEntry(K key){
@@ -179,48 +213,44 @@ void HashTable<K,V>::deleteEntry(K key){
         return;
     }
     int index = bucketIndex(key);
-    LinkedListNode<HashTableEntry< K, V>*>* node = buckets[index]->getHead();
+    LinkedListNode<HashTableEntry< K, V>*>* node = buckets[index].getHead();
     while(node){
-        K nodeKey = &(node->getData()->key);
+        K nodeKey = node->getData()->key;
         if (nodeKey == key){
-            buckets[index]->removeNode(node);
+            buckets[index].removeNode(node);
             // if after removing the node the head is empty, the list is empty.
             // decrement the currentSize of the hashtable.
                 // as a bucket has just been opened.
-            if ( buckets[index]->getHead() == nullptr )
+            if ( buckets[index].getHead() == nullptr )
                 currentSize--;
             break;
         }
         node = node->getNext();
     }
     resize();
-    std::cout << "entry not found" << std::endl;
 };
 template<class K, class V>
 void HashTable<K,V>::resize(){
     int newSize;
     float loadSize = loadFactor();
     LinkedList<HashTableEntry<K,V>*>* itemList = nullptr;
-    if (loadSize < .25 || loadSize > .75){
-        std::cout << "resizing" << std::endl;
+    if (loadSize <= .25 || loadSize >= .75){
+//        std::cout << "resizing" << std::endl;
         itemList = getListOfItems();
-        // reset currentSize to 0;
-        currentSize = 0;
     }
     else
         return;
     
-    if (loadSize > .75){
+    if (loadSize >= .75){
         //double the size
         newSize = maxSize * 2;
-    }
-//    FUTURE IMPLEMENTATION.
-    else if (loadSize < .25) {
+    } else if (loadSize <= .25) {
         // half the size
        newSize = maxSize / 2;
     }
-
+    currentSize = 0;
     maxSize = newSize;
+    // I definitely have memory leaks.
     buckets = new LinkedList<HashTableEntry<K, V>*>[maxSize];
     for (int i = 0; i < maxSize; i++ ){
         buckets[i] = LinkedList<HashTableEntry<K, V>*>();
@@ -230,7 +260,7 @@ void HashTable<K,V>::resize(){
     while(node){
         K nodeKey = node->getData()->key;
         V nodeValue = node->getData()->value;
-        set(nodeKey, nodeValue);
+        _set(nodeKey, nodeValue);
         node = node->getNext();
     }
 };

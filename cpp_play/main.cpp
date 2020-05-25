@@ -31,44 +31,25 @@ int main() {
     HashTable<int,char> ht = HashTable<int,char>(10);
     
     ht.set(3,'f');
-//    ht.set(13,'e');
-//
-//    ht.set(2,'q');
-//    ht.set(12,'g');
-//    ht.set(22,'g');
-//
-//    ht.set(5,'g');
-//
-//    ht.set(7,'g');
-//
-//    ht.set(1,'g');
-//
-//    ht.set(6,'g');
-//
-//    ht.set(4,'g');
-//    ht.set(44,'g');
-//
-//    ht.set(8,'g'); // RESIZE
-//    ht.set(9,'g');
-
-    ht.printAllKeys();
-    ht.printAllValues();
-
-    std::cout << ht.length() << std::endl;
+    ht.set(13,'e');
+    ht.set(2,'q');
+    ht.set(12,'g');
+    ht.set(22,'g');
+    ht.set(5,'g');
+    ht.set(7,'g');
     std::cout << ht.get(3) << std::endl;
+    ht.set(3,'g');
+    std::cout << ht.get(3) << std::endl;
+    ht.deleteEntry(3);
+    std::cout << ht.get(3) << std::endl;
+    ht.deleteEntry(13);
+    ht.deleteEntry(2);
+    ht.deleteEntry(12);
+    ht.deleteEntry(22);
 
     std::cout << ht.getCurrentSize() << std::endl;
     std::cout << ht.getMaxSize() << std::endl;
     std::cout << ht.loadFactor() << std::endl;
-
-
-
-
-
-
-
-    
-    
     
     return 0;
 }
