@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0A12C76A2476627C00928CDB /* HashTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A12C7682476627C00928CDB /* HashTable.cpp */; };
+		0A12C789247B786E00928CDB /* BST.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A12C788247B786E00928CDB /* BST.cpp */; };
+		0A12C78B247B78A800928CDB /* LL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A12C78A247B78A800928CDB /* LL.cpp */; };
 		0A7276B6245A83A000348BB2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A7276B5245A83A000348BB2 /* main.cpp */; };
 		0A7276BE245A846C00348BB2 /* c_string.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A7276BC245A846C00348BB2 /* c_string.cpp */; };
 		0AD0EE1624650B240008E26A /* codingProblem_findWordIn2DArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0AD0EE1424650B240008E26A /* codingProblem_findWordIn2DArray.cpp */; };
@@ -15,9 +17,7 @@
 		0AD15095245B2E0D008F3E6A /* stdStringClass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0AD15093245B2E0D008F3E6A /* stdStringClass.cpp */; };
 		0AD1509C245B33E8008F3E6A /* helperFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0AD1509A245B33E8008F3E6A /* helperFunctions.cpp */; };
 		0ADAF2E8245FC4C7006BFE68 /* codingProblem_tripleStep.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0ADAF2E7245FC4C7006BFE68 /* codingProblem_tripleStep.cpp */; };
-		0ADAF2EB2460AE20006BFE68 /* LinkedList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0ADAF2E92460AE20006BFE68 /* LinkedList.cpp */; };
 		0AEE3091245E8AFD00197894 /* pointers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0AEE308F245E8AFD00197894 /* pointers.cpp */; };
-		0AEE3094245E945A00197894 /* BinarySearchTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0AEE3092245E945A00197894 /* BinarySearchTree.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,6 +34,8 @@
 
 /* Begin PBXFileReference section */
 		0A12C7682476627C00928CDB /* HashTable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HashTable.cpp; sourceTree = "<group>"; };
+		0A12C788247B786E00928CDB /* BST.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BST.cpp; sourceTree = "<group>"; };
+		0A12C78A247B78A800928CDB /* LL.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LL.cpp; sourceTree = "<group>"; };
 		0A7276B2245A83A000348BB2 /* cpp_play */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = cpp_play; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A7276B5245A83A000348BB2 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		0A7276BC245A846C00348BB2 /* c_string.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = c_string.cpp; path = ../c_string.cpp; sourceTree = "<group>"; };
@@ -47,10 +49,8 @@
 		0AD1509A245B33E8008F3E6A /* helperFunctions.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = helperFunctions.cpp; sourceTree = "<group>"; };
 		0AD1509B245B33E8008F3E6A /* helperFunctions.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = helperFunctions.hpp; sourceTree = "<group>"; };
 		0ADAF2E7245FC4C7006BFE68 /* codingProblem_tripleStep.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = codingProblem_tripleStep.cpp; sourceTree = "<group>"; };
-		0ADAF2E92460AE20006BFE68 /* LinkedList.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LinkedList.cpp; sourceTree = "<group>"; };
 		0AEE308F245E8AFD00197894 /* pointers.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pointers.cpp; path = ../pointers.cpp; sourceTree = "<group>"; };
 		0AEE3090245E8AFD00197894 /* pointers.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = pointers.hpp; sourceTree = "<group>"; };
-		0AEE3092245E945A00197894 /* BinarySearchTree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BinarySearchTree.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,8 +80,8 @@
 		0A12C782247663DF00928CDB /* dataStructures */ = {
 			isa = PBXGroup;
 			children = (
-				0ADAF2E92460AE20006BFE68 /* LinkedList.cpp */,
-				0AEE3092245E945A00197894 /* BinarySearchTree.cpp */,
+				0A12C788247B786E00928CDB /* BST.cpp */,
+				0A12C78A247B78A800928CDB /* LL.cpp */,
 				0A12C7682476627C00928CDB /* HashTable.cpp */,
 			);
 			name = dataStructures;
@@ -174,7 +174,7 @@
 		0A7276AA245A83A000348BB2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1130;
+				LastUpgradeCheck = 1140;
 				ORGANIZATIONNAME = "James McCrory";
 				TargetAttributes = {
 					0A7276B1245A83A000348BB2 = {
@@ -208,13 +208,13 @@
 				0AEE3091245E8AFD00197894 /* pointers.cpp in Sources */,
 				0A7276BE245A846C00348BB2 /* c_string.cpp in Sources */,
 				0A12C76A2476627C00928CDB /* HashTable.cpp in Sources */,
-				0ADAF2EB2460AE20006BFE68 /* LinkedList.cpp in Sources */,
 				0AD1509C245B33E8008F3E6A /* helperFunctions.cpp in Sources */,
 				0AD15095245B2E0D008F3E6A /* stdStringClass.cpp in Sources */,
 				0ADAF2E8245FC4C7006BFE68 /* codingProblem_tripleStep.cpp in Sources */,
+				0A12C78B247B78A800928CDB /* LL.cpp in Sources */,
 				0AD0EE1624650B240008E26A /* codingProblem_findWordIn2DArray.cpp in Sources */,
 				0AD0EE1B24663FB20008E26A /* lambdaFunctions.cpp in Sources */,
-				0AEE3094245E945A00197894 /* BinarySearchTree.cpp in Sources */,
+				0A12C789247B786E00928CDB /* BST.cpp in Sources */,
 				0A7276B6245A83A000348BB2 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -334,6 +334,7 @@
 		0A7276BA245A83A000348BB2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -342,6 +343,7 @@
 		0A7276BB245A83A000348BB2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

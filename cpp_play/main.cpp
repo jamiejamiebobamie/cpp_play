@@ -10,10 +10,12 @@
 //#include "lambdaFunctions.cpp"
 //#include "helperFunctions.cpp"
 //#include<string>
-#include "dataStructures/HashTable.cpp"
-
-int main() {
-    
-    
-    return 0;
-}
+//#include "dataStructures/BST.cpp"
+//
+//int main() {
+//    
+////    BST bst = BST();
+////    bst.insert(0);
+//    
+//    return 0;
+//}

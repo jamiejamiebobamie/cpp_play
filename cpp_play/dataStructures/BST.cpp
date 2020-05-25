@@ -6,9 +6,7 @@
 //  Copyright © 2020 James McCrory. All rights reserved.
 //
 
-#include <stdio.h>
 #include<iostream>
-//#include"helperFunctions.cpp"
 #include"LL.cpp"
 
 class BinaryNode {
@@ -26,14 +24,13 @@ class BinaryNode {
         bool isBranch();
         int height(); // not sure... needs testing.
         int height_RecurHelper(int count, BinaryNode *node); // not sure... needs testing.
-    
     private:
         BinaryNode* left;
         BinaryNode* right;
         int data;
 };
-BinaryNode::BinaryNode(): data{0}, left{nullptr}, right{nullptr} {};
-BinaryNode::BinaryNode(int data) : data{data}, left{nullptr}, right{nullptr} {};
+BinaryNode::BinaryNode(): data(0), left(nullptr), right(nullptr) {};
+BinaryNode::BinaryNode(int data) : data(data), left(nullptr), right(nullptr) {};
 BinaryNode* BinaryNode::operator=(const BinaryNode&){return this;};
 BinaryNode* BinaryNode::getLeft(){return left;};
 BinaryNode* BinaryNode::getRight(){return right;};
@@ -41,7 +38,6 @@ void BinaryNode::setLeft(BinaryNode* node){left = node;};
 void BinaryNode::setRight(BinaryNode* node){right = node;};
 void BinaryNode::setData(int newData){data = newData;};
 int BinaryNode::getData()const{return data;};
-
 bool BinaryNode::isLeaf(){
     return left == nullptr && right == nullptr;
 };
@@ -49,17 +45,13 @@ bool BinaryNode::isBranch(){
     return left != nullptr || right != nullptr;
 };
 int BinaryNode::height_RecurHelper(int count, BinaryNode *node){
-    if (node != nullptr){
-        if (node->left)
-            height_RecurHelper(count+1, node->left);
-        if (node->right)
-            height_RecurHelper(count+1, node->right);
-    }
+    if (node)
+        // only increment the count if there is a node. root's height = 0.
+        count = std::max(height_RecurHelper(count+1, node->left), height_RecurHelper(count+1, node->right));
     return count;
 };
 int BinaryNode::height(){
-    int count = 0;
-    return std::max(height_RecurHelper(count, left), height_RecurHelper(count, right));
+    return std::max(height_RecurHelper(0, left), height_RecurHelper(0, right));
 }
 
 class BST {
@@ -77,8 +69,6 @@ class BST {
         BST(int data);
         BST(BinaryNode*);
         BinaryNode* getRoot();
-        void setRoot(int);
-        void setRoot(BinaryNode*);
         int getCount();
         BST(BinaryNode* nodes[], int len);
         BST(int items[], int len);
@@ -103,36 +93,38 @@ class BST {
 
     private:
         BinaryNode* root;
-        int count; // NOT IMPLEMENTED.
+        int count;
 };
 void BST::incrementCount(){count++;};
 void BST::decrementCount(){count--;};
 bool BST::recurContainsHelper(BinaryNode* node, int item){
-    if (node != nullptr){
+    if (node){
         if (node->getData() == item)
             return true;
-        recurContainsHelper(node->getLeft(), item);
-        recurContainsHelper(node->getRight(), item);
+        return recurContainsHelper(node->getLeft(), item) || recurContainsHelper(node->getRight(), item);
     }
     return false;
 };
 bool BST::contains(int item){
-    if (root != nullptr){
+    if (root){
+        if (root->getData() == item)
+            return true;
         return recurContainsHelper(root->getLeft(), item) || recurContainsHelper(root->getRight(), item);
     }
     return false;
 };
 bool BST::recurContainsHelper(BinaryNode* node, BinaryNode* newNode){
     if (node != nullptr){
-        if (node->getData() == newNode->getData())
+        if (node == newNode)
             return true;
-        recurContainsHelper(node->getLeft(), newNode);
-        recurContainsHelper(node->getRight(), newNode);
+        return recurContainsHelper(node->getLeft(), newNode) || recurContainsHelper(node->getRight(), newNode);
     }
     return false;
 };
 bool BST::contains(BinaryNode* newNode){
     if (root != nullptr){
+        if (root == newNode)
+            return true;
         return recurContainsHelper(root->getLeft(), newNode) || recurContainsHelper(root->getRight(), newNode);
     }
     return false;
@@ -152,40 +144,55 @@ void BST::recurInsertHelper(BinaryNode* node, BinaryNode* newNode){
     }
 };
 bool BST::insert(int item){
+    if (!root){
+        BinaryNode* newNode = new BinaryNode(item);
+        root = newNode;
+        incrementCount();
+        return true;
+    }
     bool itemAlreadyPresent = contains(item);
     if (!itemAlreadyPresent){
         BinaryNode* newNode = new BinaryNode(item);
+        incrementCount();
         recurInsertHelper(root, newNode);
     }
     return itemAlreadyPresent;
 };
 bool BST::insert(BinaryNode* newNode){
+    if (!root){
+        root = newNode;
+        incrementCount();
+        return true;
+    }
     bool itemAlreadyPresent = contains(newNode);
     if (!itemAlreadyPresent){
+        incrementCount();
         recurInsertHelper(root, newNode);
     }
     return itemAlreadyPresent;
 };
-BST::BST(): count{0} {root = new BinaryNode();};
-BST::BST(BinaryNode* root): root{root}, count{0} {};
+BST::BST(): count(0) {root = nullptr;};
+BST::BST(BinaryNode* root): root{root}, count(0) {incrementCount();};
 int BST::getCount(){return count;};
 BinaryNode* BST::getRoot(){return root;};
-void BST::setRoot(BinaryNode* node){if (!root)incrementCount(); root = node; };
-void BST::setRoot(int data){if (!root)incrementCount(); root = new BinaryNode(data);};
-BST::BST(int data){root = new BinaryNode(data);};
-BST::BST(BinaryNode* nodes[], int len){
-    for (int i = 0; i < len; i++)
+BST::BST(int data): count(0) {root = new BinaryNode(data);incrementCount();};
+BST::BST(BinaryNode* nodes[], int len): count(0){
+    for (int i = 0; i < len; i++){
         insert(nodes[i]);
+    }
 };
-BST::BST(int items[], int len){
-    for (int i = 0; i < len; i++)
+BST::BST(int items[], int len): count(0){
+    for (int i = 0; i < len; i++){
         insert(items[i]);
+    }
 };
 bool BST::isEmpty(){
     return root == nullptr;
 };
 int BST::height(){
-    return root->height();
+    if (root)
+        return root->height();
+    return 0;
 };
 BinaryNode* BST::findNodeIterative(int targetData){
     BinaryNode* node = root;
@@ -206,27 +213,34 @@ BinaryNode* BST::findNodeIterative(int targetData){
     }
     return nullptr;
 };
+// this works but needs to be refactored.
 BinaryNode* BST::recurFindHelper(BinaryNode* node, int item){
+    BinaryNode* possibleP = nullptr;
     if (node != nullptr){
         if (node->getData() == item)
             return node;
-        recurFindHelper(node->getLeft(), item);
-        recurFindHelper(node->getRight(), item);
+        possibleP = recurFindHelper(node->getLeft(), item);
+        if (!possibleP)
+            possibleP = recurFindHelper(node->getRight(), item);
     }
-    return nullptr;
+    return possibleP;
 };
 BinaryNode* BST::findNodeRecursive(int targetData){
     BinaryNode* targetNode = recurFindHelper(root, targetData);
     return targetNode;
 };
+// this works but needs to be refactored.
 BinaryNode* BST::recurFindParentHelper(BinaryNode* node, BinaryNode* parentNode, int item){
-    if (node != nullptr)
-        if (node->getData()){
+    BinaryNode* possibleP = nullptr;
+    if (node != nullptr){
+        if (node->getData() == item){
             return parentNode;
         }
-        recurFindParentHelper(node->getLeft(), node, item);
-        recurFindParentHelper(node->getRight(), node, item);
-    return nullptr;
+        possibleP = recurFindParentHelper(node->getLeft(), node, item);
+        if (!possibleP)
+            possibleP = recurFindParentHelper(node->getRight(), node, item);
+    }
+    return possibleP;
 };
 BinaryNode* BST::findParent(int item){
     return recurFindParentHelper(root, nullptr, item);
@@ -237,6 +251,7 @@ BinaryNode* BST::popNode(int item){
     if (itemIsInTree){
         targetNode = findNodeRecursive(item);
         remove(item);
+        decrementCount();
     }
     return targetNode;
 };
@@ -286,6 +301,7 @@ bool BST::remove(int item){
             else
                 root = nullptr;
         }
+        decrementCount();
     }
     return itemIsInTree;
 };
@@ -324,15 +340,48 @@ void BST::preorderTraversal(){
 };
  void BST::recurLevelOrderTraversalHelper(BinaryNode* node, LinkedList<int>* queue){
      if (node){
-         queue->append(node->getLeft()->getData());
-         queue->append(node->getRight()->getData());
+         if (node->getLeft())
+             queue->append(node->getLeft()->getData());
+        if (node->getRight())
+             queue->append(node->getRight()->getData());
          recurLevelOrderTraversalHelper(node->getLeft(),queue);
          recurLevelOrderTraversalHelper(node->getRight(),queue);
      }
 }
 void BST::levelOrderTraversal(){
-    LinkedList<int> queue = LinkedList<int>();
-    queue.append(root->getData());
-    recurLevelOrderTraversalHelper(root,&queue);
-    queue.printList();
+    if (root){
+        LinkedList<int> queue = LinkedList<int>();
+        queue.append(root->getData());
+        recurLevelOrderTraversalHelper(root,&queue);
+        queue.printList();
+    }
 };
+
+
+int main() {
+    
+    //    IN PROGRESS METHODS...
+    
+    //    BST(BinaryNode* nodes[], int len);
+    //    BST(int items[], int len);
+    //    BinaryNode* recurRemoveHelper(BinaryNode* targetNode, BinaryNode* minNode, bool right);
+    //    bool remove(int item);
+    
+    BST bst = BST();
+
+    bst.insert(2);
+    bst.insert(-2);
+    bst.insert(-1);
+
+    bst.insert(5);
+    bst.insert(-9);
+    /*
+                    2
+                -2      5
+             -9   -1
+            
+     */
+    bst.levelOrderTraversal();
+
+    return 0;
+}

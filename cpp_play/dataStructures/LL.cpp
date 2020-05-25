@@ -6,7 +6,6 @@
 //  Copyright © 2020 James McCrory. All rights reserved.
 //
 
-#include <stdio.h>
 #include<iostream>
 
 template<class T>
