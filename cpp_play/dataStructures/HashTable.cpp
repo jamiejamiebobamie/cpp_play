@@ -161,27 +161,11 @@ void HashTable<K,V>::set(K key, V value){
     if (contains(key)){
         deleteEntry(key);
     }
-//    LinkedListNode<HashTableEntry< K, V>*>* node = buckets[index].getHead();
-//    while(node){
-//        K nodeKey = node->getData()->key;
-//        if (nodeKey == key){
-//            buckets[index].removeNode(node);
-//            break;
-//        }
-//        node = node->getNext();
-//    }
-//    // if the head is empty, the list is empty. increment the currentSize of the hashtable.
-//        // as a new bucket has been filled.
+    // if the head is empty, the list is empty. increment the currentSize of the hashtable.
+        // as a new bucket has been filled.
     if ( buckets[index].getHead() == nullptr )
         currentSize++;
     buckets[index].append(newEntry);
-    
-    // for testing
-//    std::cout << "setting " << key << std::endl;
-//    std::cout << "current # of buckets with items " << getCurrentSize() << std::endl;
-//    std::cout << "number of buckets " <<getMaxSize() << std::endl;
-//    std::cout << "load factor " << loadFactor() << std::endl;
-    
     resize();
 };
 template<class K, class V>
@@ -192,14 +176,8 @@ void HashTable<K,V>::_set(K key, V value){
     newEntry->value = value;
     newEntry->hashCode = hashKey(key);
     int index = bucketIndex(key);
-    LinkedListNode<HashTableEntry< K, V>*>* node = buckets[index].getHead();
-    while(node){
-        K nodeKey = node->getData()->key;
-        if (nodeKey == key){
-            buckets[index].removeNode(node);
-            break;
-        }
-        node = node->getNext();
+    if (contains(key)){
+        deleteEntry(key);
     }
     // if the head is empty, the list is empty. increment the currentSize of the hashtable.
         // as a new bucket has been filled.
@@ -235,7 +213,6 @@ void HashTable<K,V>::resize(){
     float loadSize = loadFactor();
     LinkedList<HashTableEntry<K,V>*>* itemList = nullptr;
     if (loadSize <= .25 || loadSize >= .75){
-//        std::cout << "resizing" << std::endl;
         itemList = getListOfItems();
     }
     else

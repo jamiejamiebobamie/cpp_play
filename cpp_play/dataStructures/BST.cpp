@@ -80,7 +80,7 @@ class BST {
         BinaryNode* recurFindParentHelper(BinaryNode* node, BinaryNode* parentNode, int item);
         BinaryNode* findParent(int item);
         BinaryNode* popNode(int item);
-        BinaryNode* recurRemoveHelper(BinaryNode* targetNode, BinaryNode* minNode, bool right);
+        BinaryNode* recurRemoveHelper(BinaryNode* targetNode, BinaryNode* minNode, int item, bool swappingRight);
         bool remove(int item);
         void recurInorderTraversalHelper(BinaryNode* node);
         void inorderTraversal();
@@ -255,51 +255,69 @@ BinaryNode* BST::popNode(int item){
     }
     return targetNode;
 };
-BinaryNode* BST::recurRemoveHelper(BinaryNode* node, BinaryNode* minOrMaxNodeOfSubtree, bool right){
+BinaryNode* BST::recurRemoveHelper(BinaryNode* node, BinaryNode* minOrMaxNodeOfSubtree, int item, bool swappingRight){
     if (node){
         bool condition;
-        if (right)
+        if (swappingRight)
             condition = node->getData() < minOrMaxNodeOfSubtree->getData();
         else
             condition = node->getData() > minOrMaxNodeOfSubtree->getData();
-        if (condition)
+        if (condition && node->getData() != item)
             minOrMaxNodeOfSubtree = node;
-        recurRemoveHelper(node->getLeft(), minOrMaxNodeOfSubtree, right);
-        recurRemoveHelper(node->getRight(), minOrMaxNodeOfSubtree, right);
+        recurRemoveHelper(node->getLeft(), minOrMaxNodeOfSubtree, item, swappingRight);
+        recurRemoveHelper(node->getRight(), minOrMaxNodeOfSubtree, item, swappingRight);
     }
     return minOrMaxNodeOfSubtree;
 };
-// i really don't think this works. need to test.
 bool BST::remove(int item){
     bool itemIsInTree = contains(item);
+    
     if (itemIsInTree){
-        BinaryNode* targetNode = findNodeRecursive(item);
+        BinaryNode* nodeToRemove = findNodeRecursive(item);
         BinaryNode* minOrMaxNodeOfSubtree = nullptr;
-        if (targetNode->isLeaf()) {
-            BinaryNode* parentOfTargetNode = findParent(item);
-            if (parentOfTargetNode->getLeft()->getData() == item)
-                parentOfTargetNode->setLeft(nullptr);
-            else
-                parentOfTargetNode->setRight(nullptr);
-        } else {
-                if (targetNode->getRight())
-                    minOrMaxNodeOfSubtree = recurRemoveHelper(targetNode, nullptr, true);
-                else
-                    minOrMaxNodeOfSubtree = recurRemoveHelper(targetNode, nullptr, false);
+        BinaryNode* parentOfNodeToRemove = findParent(item);
+        if (nodeToRemove->isLeaf()) {
+            if (parentOfNodeToRemove->getLeft()->getData() == item){
+                parentOfNodeToRemove->setLeft(nullptr);
             }
-        if (minOrMaxNodeOfSubtree){
-            BinaryNode* rootLeft = root->getLeft();
-            BinaryNode* rootRight = root->getRight();
-            minOrMaxNodeOfSubtree->setLeft(rootLeft);
-            minOrMaxNodeOfSubtree->setRight(rootRight);
-            root->setLeft(nullptr);
-            root->setRight(nullptr);
-        }
-        if (targetNode == root){
-            if (minOrMaxNodeOfSubtree)
-                root = minOrMaxNodeOfSubtree;
-            else
-                root = nullptr;
+            else{
+                parentOfNodeToRemove->setRight(nullptr);
+            }
+        } else {
+            // if node is not a leaf, find the minimum node on of the right side or the maximum node of the left side
+                // and swap that node with the nodeToRemove
+            if (nodeToRemove->getRight()){
+                minOrMaxNodeOfSubtree = recurRemoveHelper(nodeToRemove, nodeToRemove->getRight(), item, true);
+            } else{
+                minOrMaxNodeOfSubtree = recurRemoveHelper(nodeToRemove, nodeToRemove->getLeft(), item, false);
+            }
+            // works up to here. ^^
+            
+//
+//            parentOfNodeToRemove->setData(minOrMaxNodeOfSubtree->getData());
+//            // swap the data of the minOrMaxNodeOfSubtree node with its parent.
+//
+//
+//            if (minOrMaxNodeOfSubtree != parentOfNodeToRemove->getRight())
+//                 parentOfNodeToRemove->setRight(minOrMaxNodeOfSubtree->getRight());
+//            else
+//                parentOfNodeToRemove->setRight(nullptr);
+//
+//
+//
+//
+//            BinaryNode* rootLeft = root->getLeft();
+//            BinaryNode* rootRight = root->getRight();
+//            minOrMaxNodeOfSubtree->setLeft(rootLeft);
+//            minOrMaxNodeOfSubtree->setRight(rootRight);
+//            root->setLeft(nullptr);
+//            root->setRight(nullptr);
+//        }
+//        if (nodeToRemove == root){
+//            if (minOrMaxNodeOfSubtree)
+//                root = minOrMaxNodeOfSubtree;
+//            else
+//                root = nullptr;
         }
         decrementCount();
     }
@@ -348,6 +366,7 @@ void BST::preorderTraversal(){
          recurLevelOrderTraversalHelper(node->getRight(),queue);
      }
 }
+// this prints off a blank newline at the end. need to fix.
 void BST::levelOrderTraversal(){
     if (root){
         LinkedList<int> queue = LinkedList<int>();
@@ -364,6 +383,7 @@ int main() {
     
     //    BST(BinaryNode* nodes[], int len);
     //    BST(int items[], int len);
+    
     //    BinaryNode* recurRemoveHelper(BinaryNode* targetNode, BinaryNode* minNode, bool right);
     //    bool remove(int item);
     
@@ -381,7 +401,10 @@ int main() {
              -9   -1
             
      */
-    bst.levelOrderTraversal();
+    bst.inorderTraversal();
+    bst.remove(-2);
+    std::cout << "" << std::endl;
+    bst.inorderTraversal();
 
     return 0;
 }
