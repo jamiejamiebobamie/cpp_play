@@ -9,12 +9,12 @@
 //https://github.com/jamiejamiebobamie/CS-1.3-Core-Data-Structures/blob/master/Lessons/source/hashtable.py
 
 #include <iostream>
-#include "LinkedList.cpp"
+#include "LL.cpp"
 
 template<class K, class V>
 struct HashTableEntry{
-    K *key;
-    V *value;
+    K key;
+    V value;
     int hashCode;
 };
 
@@ -24,7 +24,7 @@ public:
     HashTable(int maxSize);
     const size_t hashKey(K key);
     int bucketIndex(K key);
-    int loadFactor();
+    float loadFactor();
     void printAllKeys();
     void printAllValues();
     LinkedList<HashTableEntry<K,V>*>* getListOfItems();
@@ -34,16 +34,19 @@ public:
     void set(K key, V value);
     void deleteEntry(K key);
     void resize();
+    int getCurrentSize()const;
+    int getMaxSize()const;
+
 private:
-    // !!!...not implemented...!!!
     int currentSize; // number of buckets with at least one entry in the linkedlist.
     int maxSize; // max number of buckets
     LinkedList<HashTableEntry<K, V>*>* buckets;
 };
 template<class K, class V>
 HashTable<K,V>::HashTable(int maxSize): maxSize(maxSize), currentSize(0) {
+    buckets = new LinkedList<HashTableEntry<K, V>*>[maxSize];
     for (int i = 0; i < maxSize; i++ ){
-        buckets[i] = new LinkedList<HashTableEntry<K, V>*>;
+        buckets[i] = LinkedList<HashTableEntry<K, V>*>();
     }
 };
 template<class K, class V>
@@ -57,7 +60,7 @@ int HashTable<K,V>::bucketIndex(K key){
     return hashKey(key) % maxSize;
 };
 template<class K, class V>
-int HashTable<K,V>::loadFactor(){
+float HashTable<K,V>::loadFactor(){
     if (!currentSize)
         return currentSize;
     else
@@ -72,7 +75,7 @@ void HashTable<K,V>::printAllKeys(){
     for (int i = 0; i < maxSize; i++ ){
         LinkedListNode<HashTableEntry<K, V>*>* node = buckets[i].getHead();
         while(node){
-            std::cout << &(node->getData()->key) << std::endl;
+            std::cout << node->getData()->key << std::endl;
             node = node->getNext();
         }
     }
@@ -86,7 +89,7 @@ void HashTable<K,V>::printAllValues(){
     for (int i = 0; i < maxSize; i++ ){
         LinkedListNode<HashTableEntry<K, V>*>* node = buckets[i].getHead();
         while(node){
-            std::cout << &(node->getData()->value) << std::endl;
+            std::cout << node->getData()->value << std::endl;
             node = node->getNext();
         }
     }
@@ -135,40 +138,40 @@ bool HashTable<K,V>::contains(K key){
 template<class K, class V>
 V HashTable<K,V>::get(K key){
     if (!currentSize){
-        return nullptr;
+        return V();
     }
     int index = bucketIndex(key);
-    LinkedListNode<HashTableEntry< K, V>*>* node = buckets[index]->getHead();
+    LinkedListNode<HashTableEntry< K, V>*>* node = buckets[index].getHead();
     while(node){
-        K nodeKey = &(node->getData()->key);
+        K nodeKey = node->getData()->key;
         if (nodeKey == key)
-            return &(node->getData()->value);
+            return node->getData()->value;
         node = node->getNext();
     }
-    return nullptr;
+    return V();
 };
 template<class K, class V>
 void HashTable<K,V>::set(K key, V value){
     HashTableEntry<K,V>* newEntry = new struct HashTableEntry<K,V>; // do i need the 'struct' keyword before the type declaration?
     newEntry->key = key;
     newEntry->value = value;
-    newEntry->hash = hashKey(key);
+    newEntry->hashCode = hashKey(key);
     int index = bucketIndex(key);
-    LinkedListNode<HashTableEntry< K, V>*>* node = buckets[index]->getHead();
+    LinkedListNode<HashTableEntry< K, V>*>* node = buckets[index].getHead();
     while(node){
-        K nodeKey = &(node->getData()->key);
+        K nodeKey = node->getData()->key;
         if (nodeKey == key){
-            buckets[index]->removeNode(node);
-            resize();
+            buckets[index].removeNode(node);
             break;
         }
         node = node->getNext();
     }
     // if the head is empty, the list is empty. increment the currentSize of the hashtable.
         // as a new bucket has been filled.
-    if ( buckets[index]->getHead() == nullptr )
+    if ( buckets[index].getHead() == nullptr )
         currentSize++;
-    buckets[index]->append(newEntry);
+    buckets[index].append(newEntry);
+    resize();
 };
 template<class K, class V>
 void HashTable<K,V>::deleteEntry(K key){
@@ -186,49 +189,57 @@ void HashTable<K,V>::deleteEntry(K key){
                 // as a bucket has just been opened.
             if ( buckets[index]->getHead() == nullptr )
                 currentSize--;
-            resize();
             break;
         }
         node = node->getNext();
     }
+    resize();
     std::cout << "entry not found" << std::endl;
 };
 template<class K, class V>
 void HashTable<K,V>::resize(){
-    // i don't think i need to cast both to floats to get a float...
     int newSize;
-    float loadSize = float(currentSize)/float(maxSize);
+    float loadSize = loadFactor();
     LinkedList<HashTableEntry<K,V>*>* itemList = nullptr;
-    
-    if (loadSize < .25 || loadSize > .75)
+    if (loadSize < .25 || loadSize > .75){
+        std::cout << "resizing" << std::endl;
         itemList = getListOfItems();
+        // reset currentSize to 0;
+        currentSize = 0;
+    }
     else
         return;
     
     if (loadSize > .75){
         //double the size
         newSize = maxSize * 2;
-    } else if (loadSize < .25) {
+    }
+//    FUTURE IMPLEMENTATION.
+    else if (loadSize < .25) {
         // half the size
        newSize = maxSize / 2;
     }
-    for (int i = 0; i < maxSize; i++ ){
-        // a "starter" pointer to a series of linkedlist pointers
-        // that contain nodes to hashTableEntry pointers that contain
-        // fields of key and value pointers.
-        // i definitely have some memory leaks.
-        delete buckets[i];
-    }
+
     maxSize = newSize;
+    buckets = new LinkedList<HashTableEntry<K, V>*>[maxSize];
     for (int i = 0; i < maxSize; i++ ){
-        buckets[i] = new LinkedList<HashTableEntry<K, V>*>;
+        buckets[i] = LinkedList<HashTableEntry<K, V>*>();
     }
     LinkedListNode<HashTableEntry<K,V>*>* node = itemList->getHead();
     
     while(node){
-        K nodeKey = &(node->getData()->key);
-        V nodeValue = &(node->getData()->value);
+        K nodeKey = node->getData()->key;
+        V nodeValue = node->getData()->value;
         set(nodeKey, nodeValue);
+        node = node->getNext();
     }
+};
+template<class K, class V>
+int HashTable<K,V>::getCurrentSize()const{
+    return currentSize;
+};
+template<class K, class V>
+int HashTable<K,V>::getMaxSize()const{
+    return maxSize;
 };
 
