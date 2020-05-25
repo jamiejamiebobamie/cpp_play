@@ -21,7 +21,7 @@ struct HashTableEntry{
 template<class K, class V>
 class HashTable{
 public:
-    HashTable(int maxSize);
+    HashTable();
     const size_t hashKey(K key);
     int bucketIndex(K key);
     float loadFactor();
@@ -32,19 +32,19 @@ public:
     bool contains(K key);
     V get(K key);
     void set(K key, V value);
-    void _set(K key, V value);
     void deleteEntry(K key);
     void resize();
     int getCurrentSize()const;
     int getMaxSize()const;
 
 private:
+    void _set(K key, V value);
     int currentSize; // number of buckets with at least one entry in the linkedlist.
     int maxSize; // max number of buckets
     LinkedList<HashTableEntry<K, V>*>* buckets;
 };
 template<class K, class V>
-HashTable<K,V>::HashTable(int maxSize): maxSize(maxSize), currentSize(0) {
+HashTable<K,V>::HashTable(): maxSize(4), currentSize(0) {
     buckets = new LinkedList<HashTableEntry<K, V>*>[maxSize];
     for (int i = 0; i < maxSize; i++ ){
         buckets[i] = LinkedList<HashTableEntry<K, V>*>();
