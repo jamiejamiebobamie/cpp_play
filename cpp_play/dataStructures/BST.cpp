@@ -255,32 +255,36 @@ BinaryNode* BST::popNode(int item){
     }
     return targetNode;
 };
-BinaryNode* BST::recurRemoveHelper(BinaryNode* node, BinaryNode* minOrMaxNodeOfSubtree, int item, bool swappingRight){
-    if (node){
-        bool condition;
-        if (swappingRight)
-            condition = node->getData() < minOrMaxNodeOfSubtree->getData();
-        else
-            condition = node->getData() > minOrMaxNodeOfSubtree->getData();
-        if (condition && node->getData() != item)
-            minOrMaxNodeOfSubtree = node;
-        recurRemoveHelper(node->getLeft(), minOrMaxNodeOfSubtree, item, swappingRight);
-        recurRemoveHelper(node->getRight(), minOrMaxNodeOfSubtree, item, swappingRight);
-    }
-    return minOrMaxNodeOfSubtree;
+BinaryNode* BST::recurRemoveHelper(BinaryNode* currNode, BinaryNode* currMaxOrMin, int item, bool swappingRight){
+        if (currNode){
+            bool condition;
+            // looking for the minimum in the right tree
+            if (swappingRight)
+                condition = currNode->getData() > currMaxOrMin->getData();
+            // looking for the maximum in the left tree
+            else
+                condition = currNode->getData() < currMaxOrMin->getData();
+            if (condition){
+//                    std::cout << "currNode: " << currNode->getData() << " currMaxOrMin: " << currMaxOrMin->getData() <<" swappingRight: "<<swappingRight<< std::endl;
+                    currMaxOrMin = currNode;
+                }
+            currMaxOrMin = recurRemoveHelper(currNode->getLeft(), currMaxOrMin, item, swappingRight);
+            }
+    return currMaxOrMin;
 };
+// working except for when the node to remove is the root.
+    // also need to test for other edge cases.
 bool BST::remove(int item){
     bool itemIsInTree = contains(item);
-    
     if (itemIsInTree){
         BinaryNode* nodeToRemove = findNodeRecursive(item);
-        BinaryNode* minOrMaxNodeOfSubtree = nullptr;
         BinaryNode* parentOfNodeToRemove = findParent(item);
+        BinaryNode* minOrMaxNodeOfSubtree = nullptr;
+
         if (nodeToRemove->isLeaf()) {
             if (parentOfNodeToRemove->getLeft()->getData() == item){
                 parentOfNodeToRemove->setLeft(nullptr);
-            }
-            else{
+            } else{
                 parentOfNodeToRemove->setRight(nullptr);
             }
         } else {
@@ -291,35 +295,39 @@ bool BST::remove(int item){
             } else{
                 minOrMaxNodeOfSubtree = recurRemoveHelper(nodeToRemove, nodeToRemove->getLeft(), item, false);
             }
-            // works up to here. ^^
+
+            int minOrMaxValue = minOrMaxNodeOfSubtree->getData();
+            BinaryNode* parentOfMinOrMaxNodeOfSubtree = findParent(minOrMaxValue);
             
-//
-//            parentOfNodeToRemove->setData(minOrMaxNodeOfSubtree->getData());
-//            // swap the data of the minOrMaxNodeOfSubtree node with its parent.
-//
-//
-//            if (minOrMaxNodeOfSubtree != parentOfNodeToRemove->getRight())
-//                 parentOfNodeToRemove->setRight(minOrMaxNodeOfSubtree->getRight());
-//            else
-//                parentOfNodeToRemove->setRight(nullptr);
-//
-//
-//
-//
-//            BinaryNode* rootLeft = root->getLeft();
-//            BinaryNode* rootRight = root->getRight();
-//            minOrMaxNodeOfSubtree->setLeft(rootLeft);
-//            minOrMaxNodeOfSubtree->setRight(rootRight);
-//            root->setLeft(nullptr);
-//            root->setRight(nullptr);
-//        }
-//        if (nodeToRemove == root){
-//            if (minOrMaxNodeOfSubtree)
-//                root = minOrMaxNodeOfSubtree;
-//            else
-//                root = nullptr;
+            if(parentOfNodeToRemove)
+                std::cout<<"parentOfNodeToRemove: " <<parentOfNodeToRemove->getData()<<std::endl;
+            if(nodeToRemove)
+                std::cout<<"nodeToRemove: " << nodeToRemove->getData() <<std::endl;
+            if(minOrMaxNodeOfSubtree)
+                std::cout<<"minOrMaxNodeOfSubtree: "<<minOrMaxNodeOfSubtree->getData() <<std::endl;
+            if(parentOfMinOrMaxNodeOfSubtree)
+                std::cout<<"parentOfMinOrMaxNodeOfSubtree: " << parentOfMinOrMaxNodeOfSubtree->getData()<<std::endl;
+            
+            if (parentOfMinOrMaxNodeOfSubtree->getRight()){
+                if (parentOfMinOrMaxNodeOfSubtree->getRight()->getData() == minOrMaxValue){
+                    parentOfMinOrMaxNodeOfSubtree->setRight(nullptr);
+                }
+            } else if (parentOfMinOrMaxNodeOfSubtree->getLeft()) {
+                if (parentOfMinOrMaxNodeOfSubtree->getLeft()->getData() == minOrMaxValue){
+                parentOfMinOrMaxNodeOfSubtree->setLeft(nullptr);
+            }
+            }
+            // swap the data of the minOrMaxNodeOfSubtree node with its parent.
+            nodeToRemove->setData(minOrMaxValue);
+
+            if (nodeToRemove == root){
+                if (minOrMaxNodeOfSubtree)
+                    root = minOrMaxNodeOfSubtree;
+                else
+                    root = nullptr;
+            }
+            decrementCount();
         }
-        decrementCount();
     }
     return itemIsInTree;
 };
@@ -390,21 +398,33 @@ int main() {
     BST bst = BST();
 
     bst.insert(2);
-    bst.insert(-2);
-    bst.insert(-1);
-
+    bst.insert(-3);
     bst.insert(5);
+    bst.insert(-5);
+    bst.insert(-4);
     bst.insert(-9);
+    bst.insert(-1);
+    bst.insert(-2);
+    bst.insert(0);
+    bst.insert(4);
+    
+    bst.postorderTraversal();
+    
+    bst.remove(2);
+
+    std::cout << " " << std::endl;
+
+
+
     /*
                     2
-                -2      5
-             -9   -1
+                -3      5
+             -5   -1   4
+           -9 -4 -2 0
             
      */
-    bst.inorderTraversal();
-    bst.remove(-2);
-    std::cout << "" << std::endl;
-    bst.inorderTraversal();
+//    bst.remove(-2); // doesn't work on the root
+    bst.postorderTraversal();
 
     return 0;
 }
