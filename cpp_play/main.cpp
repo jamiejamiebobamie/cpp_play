@@ -7,15 +7,13 @@
 //
 
 #include <iostream>
-//#include "lambdaFunctions.cpp"
 //#include "helperFunctions.cpp"
-//#include<string>
-//#include "dataStructures/BST.cpp"
-//
+
+//#include "std_play/string_play.cpp"
+//#include "dataStructures/LL.cpp"
+
 //int main() {
-//    
-////    BST bst = BST();
-////    bst.insert(0);
-//    
+////    TestString ts = TestString();
+////    ts._test();
 //    return 0;
 //}

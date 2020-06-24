@@ -248,10 +248,10 @@ BinaryNode* BST::findParent(int item){
 BinaryNode* BST::popNode(int item){
     bool itemIsInTree = contains(item);
     BinaryNode* targetNode = nullptr;
+
     if (itemIsInTree){
-        targetNode = findNodeRecursive(item);
+        targetNode = new BinaryNode(item);
         remove(item);
-        decrementCount();
     }
     return targetNode;
 };
@@ -385,7 +385,7 @@ void BST::levelOrderTraversal(){
 };
 
 
-int main() {
+//int main() {
     
     //    IN PROGRESS METHODS...
     
@@ -394,25 +394,25 @@ int main() {
     
     //    BinaryNode* recurRemoveHelper(BinaryNode* targetNode, BinaryNode* minNode, bool right);
     //    bool remove(int item);
-    
-    BST bst = BST();
-
-    bst.insert(2);
-    bst.insert(-3);
-    bst.insert(5);
-    bst.insert(-5);
-    bst.insert(-4);
-    bst.insert(-9);
-    bst.insert(-1);
-    bst.insert(-2);
-    bst.insert(0);
-    bst.insert(4);
-    
-    bst.postorderTraversal();
-    
-    bst.remove(2);
-
-    std::cout << " " << std::endl;
+//
+//    BST bst = BST();
+//
+//    bst.insert(2);
+//    bst.insert(-3);
+//    bst.insert(5);
+//    bst.insert(-5);
+//    bst.insert(-4);
+//    bst.insert(-9);
+//    bst.insert(-1);
+//    bst.insert(-2);
+//    bst.insert(0);
+//    bst.insert(4);
+//
+//    bst.postorderTraversal();
+//
+//    bst.remove(2);
+//
+//    std::cout << " " << std::endl;
 
 
 
@@ -424,7 +424,7 @@ int main() {
             
      */
 //    bst.remove(-2); // doesn't work on the root
-    bst.postorderTraversal();
+//    bst.postorderTraversal();
 
-    return 0;
-}
+//    return 0;
+//}
